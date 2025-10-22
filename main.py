@@ -16,5 +16,19 @@ soup = BeautifulSoup(webpage, 'html.parser')
 #print(soup.body.main.find_all("article"))
 articles = soup.body.main.find_all("article")
 for article in articles:
-    print(article.get_text())
-    print("#" * 100)
+    article_content = article.div.div
+
+    """
+    titles = article_content.find_all('h5')
+    title = f"{titles[0].string} : {titles[1].string}"
+    print(title)
+    print("\n")
+    description = article_content.find_all('p')[-1].string
+    print(description)
+    print("\n\n\n\n")
+    """
+    items_list = article_content.find_all('p')
+    for item in items_list:
+        print(item.get_text(separator=" ", strip=True))
+
+    break
