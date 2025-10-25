@@ -1,0 +1,68 @@
+
+    <div class="section">
+     <app-root>
+     </app-root>
+     <div class="frame sharer-icons py-3">
+      <div class="frame-container frame-container-default">
+       <div class="d-flex justify-content-end">
+        <div class="btn-group shadow-0">
+         <a aria-expanded="false" class="share-button print rounded-pill dropdown-toggle" data-mdb-toggle="dropdown" href="#" title="Delite povezavo">
+          <svg aria-hidden="true" class="svg-inline--fa fa-share-alt fa-w-14" data-icon="share-alt" data-prefix="fas" fill="#000000" focusable="false" role="img" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+           <path d="M352 320c-22.608 0-43.387 7.819-59.79 20.895l-102.486-64.054a96.551 96.551 0 0 0 0-41.683l102.486-64.054C308.613 184.181 329.392 192 352 192c53.019 0 96-42.981 96-96S405.019 0 352 0s-96 42.981-96 96c0 7.158.79 14.13 2.276 20.841L155.79 180.895C139.387 167.819 118.608 160 96 160c-53.019 0-96 42.981-96 96s42.981 96 96 96c22.608 0 43.387-7.819 59.79-20.895l102.486 64.054A96.301 96.301 0 0 0 256 416c0 53.019 42.981 96 96 96s96-42.981 96-96-42.981-96-96-96z" fill="currentColor">
+           </path>
+          </svg>
+         </a>
+         <ul class="dropdown-menu">
+          <li>
+           <a class="dropdown-item" target="_blank" title="Delite na Facebooku">
+            <svg fill="#313131" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+             <path d="M19,4V7H17A1,1 0 0,0 16,8V10H19V13H16V20H13V13H11V10H13V7.5C13,5.56 14.57,4 16.5,4M20,2H4A2,2 0 0,0 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4C22,2.89 21.1,2 20,2Z">
+             </path>
+            </svg>
+            Facebook
+           </a>
+          </li>
+          <li>
+           <a class="dropdown-item" target="_blank" title="Delite na Twitterju">
+            <svg class="twitter" fill="#000000" height="24" viewbox="0 0 448 512" width="24" xmlns="http://www.w3.org/2000/svg">
+             <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+             <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm297.1 84L257.3 234.6 379.4 396H283.8L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5L313.6 116h47.5zM323.3 367.6L153.4 142.9H125.1L296.9 367.6h26.3z">
+             </path>
+            </svg>
+            Twitter
+           </a>
+          </li>
+          <li>
+           <a class="dropdown-item" target="_blank" title="Delite na Linkedinu">
+            <svg class="linkedin" fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+             <path d="M19,19H16V13.7A1.5,1.5 0 0,0 14.5,12.2A1.5,1.5 0 0,0 13,13.7V19H10V10H13V11.2C13.5,10.36 14.59,9.8 15.5,9.8A3.5,3.5 0 0,1 19,13.3M6.5,8.31C5.5,8.31 4.69,7.5 4.69,6.5A1.81,1.81 0 0,1 6.5,4.69C7.5,4.69 8.31,5.5 8.31,6.5A1.81,1.81 0 0,1 6.5,8.31M8,19H5V10H8M20,2H4C2.89,2 2,2.89 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4C22,2.89 21.1,2 20,2Z">
+             </path>
+            </svg>
+            Linkedin
+           </a>
+          </li>
+          <li>
+           <hr class="dropdown-divider"/>
+          </li>
+          <li>
+           <a class="dropdown-item share-link" onclick="CopyUrl();">
+            <svg clip-rule="evenodd" fill-rule="evenodd" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+             <path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z">
+             </path>
+            </svg>
+            Kopiraj povezavo
+           </a>
+          </li>
+         </ul>
+        </div>
+        <a class="share-button print print-button rounded-pill" href="javascript:window.print()" title="Natisnite stran">
+         <svg class="print" fill="#000000" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z" fill="currentColor">
+          </path>
+         </svg>
+        </a>
+       </div>
+      </div>
+     </div>
+    </div>
+   
