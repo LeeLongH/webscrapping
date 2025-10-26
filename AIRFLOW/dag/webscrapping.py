@@ -7,9 +7,11 @@ import requests
 import firebase_admin
 from firebase_admin import db, credentials
 from datetime import datetime, timedelta
+from functools import reduce
 
 from studentski_servis import scrap_studentski_servis
 from zrszz import scrap_ZRSZZ
+from optius import scrap_optius
 
 # --- Firebase setup ---
 cred = credentials.Certificate("db-credentials.json")
@@ -22,6 +24,13 @@ ref = db.reference("/")
 today_date = datetime.today().strftime("%Y-%m-%d")
 yesterday_date = (datetime.today() - timedelta(days=1))
 
+def to_lower(str):
+    str = str.lower()
+    dict = \
+        ('študenti/ke', 'študenti'), \
+        ('študenta/ko', 'študenta')
+    
+    str = reduce(lambda a, kv: a.replace(*kv), dict, str).capitalize()
 
 # --- SHared functions ---
 
@@ -65,28 +74,30 @@ def insert_to_db_if_new_record(title,location,description):
 
 # STUDENTKSI SERVIS ////////////////////////////////////////////////////////////////
 
-URI_studentski_servis = " \
-https://www.studentski-servis.com/studenti/prosta-dela?kljb=&page=1&isci=1&sort=&dd1=1&dm1s=1 \
-&regija%5B%5D=ljubljana-z-okolico&regija%5B%5D=domzale-kamnik&skD%5B%5D=004&skD%5B%5D=A832&sk \
-D%5B%5D=A210&skD%5B%5D=A055&skD%5B%5D=A078&skD%5B%5D=A090&skD%5B%5D=A095&hourlyratefrom=6.32&hourlyrateto=36&hourly_rate=6.32%3B41 \
-"
+URI_studentski_servis = ("https://www.studentski-servis.com/studenti/"
+                        "prosta-dela?kljb=&page=1&isci=1&sort=&dd1=1&dm1s=1"
+                        "&regija%5B%5D=ljubljana-z-okolico&regija%5B%5D=domzale"
+                        "-kamnik&skD%5B%5D=004&skD%5B%5D=A832&skD%5B%5D=A210&"
+                        "skD%5B%5D=A055&skD%5B%5D=A078&skD%5B%5D=A090&skD%5B%5D"
+                        "=A095&hourlyratefrom=6.32&hourlyrateto=36&hourly_rate=6.32%3B41")
 URI_zaposlitev_info = " \
 https://www.ess.gov.si/iskalci-zaposlitve/iskanje-zaposlitve/iskanje-dela/#/?iskalniTekst=&" \
 "iskalnaLokacija=&drzava=SI,&datObj=THIS_WEEK,&pokPod=0020,&regija=Osrednjeslovenska, \
 "
-URI_ZRSZZ = " \
-https://www.ess.gov.si/iskalci-zaposlitve/iskanje-zaposlitve/iskanje-dela/#/?iskalniTekst=& \
-iskalnaLokacija=&drzava=SI,&datObj=TODAY,&pokPod=0020,&regija=Osrednjeslovenska, \
-"
-URI_webpage = URI_zaposlitev_info
+URI_ZRSZZ = ("https://www.ess.gov.si/iskalci-zaposlitve/iskanje-zaposlitve/"
+             "iskanje-dela/#/?iskalniTekst=&iskalnaLokacija=&drzava=SI,"
+             "&datObj=TODAY,&pokPod=0020,&regija=Osrednjeslovenska,")
+
+URI_optius = ("https://www.optius.com/iskalci/prosta-delovna-mesta/?Keywords=it+specialist&Fields%5B%5D=37&Regions%5B%5D=26&doSearch=&Time=")
+
+URI_webpage = URI_optius
 
 webpage = requests.get(URI_webpage).text
 soup = BeautifulSoup(webpage, 'html.parser')
 
-#scrap_studentski_servis(soup, insert_to_db_if_new_record)
-#scrap1_ZRSZZ(URI_webpage, insert_to_db_if_new_record)
-scrap_ZRSZZ(insert_to_db_if_new_record)
-
+#scrap_studentski_servis(soup, insert_to_db_if_new_record, to_lower)
+#scrap_ZRSZZ(insert_to_db_if_new_record, to_lower)
+scrap_optius(soup, insert_to_db_if_new_record, to_lower)
 
 
 

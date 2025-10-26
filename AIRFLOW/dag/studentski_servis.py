@@ -1,5 +1,5 @@
 
-def scrap_studentski_servis(soup, inserted_func):
+def scrap_studentski_servis(soup, inserted_func, to_lower):
     """
         soup:           BeautifulSoup object of the webpage
         insert_func:    function to insert a record into Firebase
@@ -23,4 +23,4 @@ def scrap_studentski_servis(soup, inserted_func):
         #print("\n")
 
         # Insert into DB using the function passed from the controller
-        inserted_func(title, location, description)
+        inserted_func(to_lower(title), to_lower(location), to_lower(description))

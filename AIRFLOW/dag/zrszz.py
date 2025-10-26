@@ -3,7 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
 
-# Headers mimicking browser
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
@@ -15,16 +14,19 @@ headers = {
 }
 
 def get_jobs_id():
+    """
+        Fetch today's job basic info
+        INPUT: /
+        OUTPUT: list of jobs id and titles
 
-    # API endpoint
-    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/v1/delovno-mesto/prosta-delovna-mesta-filtri"
+    """
+    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/" \
+           "v1/delovno-mesto/prosta-delovna-mesta-filtri"
 
-    # API key
     params = {
         "user_key": "5ab0803785c1c97d8e3331d671fcbaa9"
     }
 
-    # JSON payload (filters)
     payload = {
         "nazivDelovnegaMesta": "",
         "lokacija": "",
@@ -44,12 +46,11 @@ def get_jobs_id():
         "vrniFiltre": True
     }
 
-    # Send POST request
     response = requests.post(url, headers=headers, params=params, json=payload)
 
-    # Check status
     print("Status code:", response.status_code)
 
+    # Get jobs id and titles
     jobs_id = []
     titles = []
     if response.status_code == 200:
@@ -60,48 +61,50 @@ def get_jobs_id():
             #print(job)
     else:
         print("Failed:", response.text)
-    print(jobs_id)
+    #print(jobs_id)
     
     return jobs_id, titles
 
-
 def get_job_info(job_id):
-    #job_id = 3267005
+    """
+        Fetch today's job comprehensive info
+        INPUT: job id
+        OUTPUT: job description and location
+
+    """
     api_key = "5ab0803785c1c97d8e3331d671fcbaa9"
 
-    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/v1/delovno-mesto/podrobnosti-prosto-delovno-mesto"
+    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/" \
+          "v1/delovno-mesto/podrobnosti-prosto-delovno-mesto"
+    
     params = {
         "idDelovnoMesto": job_id,
         "user_key": api_key
     }
 
-
-
     response = requests.get(url, headers=headers, params=params, timeout=10)
     print(f"[{job_id}] Status:", response.status_code)
     
-
     if not response.text.strip():
         print(f"[{job_id}] has empty response.")
     else:
         data = response.json()
 
-        description = data.get("opisDelInNalog").lower().capitalize()
-        location = data.get("delodajalec") + data.get("delodajalecNaslov")
+        description = data.get("opisDelInNalog")
+        location = f"{data.get("delodajalec")}, {data.get("delodajalecNaslov")}"
 
         return (description, location)
 
-def scrap_ZRSZZ(inserted_func):
+def scrap_ZRSZZ(inserted_func, to_lower):
     jobs_id, titles = get_jobs_id()
 
     for i in range(0, len(jobs_id)):
         description, location = get_job_info(jobs_id[i])
-        break
+        inserted_func(to_lower(titles[i]),to_lower(location),to_lower((description)))
 
-        inserted_func(titles[i],location,description)
-
-
+# Example
 """
+get_jobs_id:
 {'idDelovnoMesto': '3349316', 
 'nazivDelovnegaMesta': 'SISTEMSKI ADMINISTRATOR VII/2 (I) V SLUŽBI ZA INFORMACIJSKO TEHNOLOGIJO NA TAJNIŠTVU UL MEDICINSKE FAKULTETE - M/Ž', 
 'delodajalec': 'UNIVERZA V LJUBLJANI, MEDICINSKA FAKULTETA', 
@@ -119,6 +122,7 @@ def scrap_ZRSZZ(inserted_func):
 'datumSpremembe': '2025-10-24T11:08:00+02:00', 
 'ikonaNegativnaReferenca': 'NE'}
 
+get_job_info:
 {'idDelovnoMesto': '3348232', 
 'registerskaStevilka': 'PX38740', 
 'steviloOgledov': 73, 
