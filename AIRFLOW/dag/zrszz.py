@@ -13,15 +13,13 @@ headers = {
     "Accept-Language": "sl-SI,sl;q=0.9,en-GB;q=0.8,en;q=0.7",
 }
 
-def get_jobs_id():
+def get_jobs_id(url):
     """
         Fetch today's job basic info
         INPUT: /
         OUTPUT: list of jobs id and titles
 
     """
-    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/" \
-           "v1/delovno-mesto/prosta-delovna-mesta-filtri"
 
     params = {
         "user_key": "5ab0803785c1c97d8e3331d671fcbaa9"
@@ -31,7 +29,7 @@ def get_jobs_id():
         "nazivDelovnegaMesta": "",
         "lokacija": "",
         "drzave": ["SI", ""],
-        "datumObjave": "THIS_WEEK",
+        "datumObjave": "TODAY",
         "delovniCas": "",
         "jeziki": [],
         "podrocjaIzobrazbe": [],
@@ -57,15 +55,17 @@ def get_jobs_id():
         data = response.json()
         for job in data.get("seznamDelovnihMest", []):
             jobs_id.append(job.get("idDelovnoMesto"))
-            titles.append(data.get("nazivDelovnegaMesta"))
-            #print(job)
+            titles.append(job.get("nazivDelovnegaMesta"))
+            print(job.get("nazivDelovnegaMesta"))
+            print(job.get("delodajalec"))
+            print(job.get("delodajalecNaslov"))
     else:
         print("Failed:", response.text)
     #print(jobs_id)
     
     return jobs_id, titles
 
-def get_job_info(job_id):
+def get_job_info(url, job_id):
     """
         Fetch today's job comprehensive info
         INPUT: job id
@@ -74,9 +74,6 @@ def get_job_info(job_id):
     """
     api_key = "5ab0803785c1c97d8e3331d671fcbaa9"
 
-    url = "https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/" \
-          "v1/delovno-mesto/podrobnosti-prosto-delovno-mesto"
-    
     params = {
         "idDelovnoMesto": job_id,
         "user_key": api_key
@@ -95,14 +92,14 @@ def get_job_info(job_id):
 
         return (description, location)
 
-def scrap_ZRSZZ(inserted_func, to_lower):
-    jobs_id, titles = get_jobs_id()
+def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, push_to_db, to_lower):
+    jobs_id, titles = get_jobs_id(URL1_ZRSZZ)
 
     for i in range(0, len(jobs_id)):
-        description, location = get_job_info(jobs_id[i])
-        inserted_func(to_lower(titles[i]),to_lower(location),to_lower((description)))
+        description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
+        push_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)
 
-# Example
+# Response Example
 """
 get_jobs_id:
 {'idDelovnoMesto': '3349316', 
