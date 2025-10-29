@@ -101,8 +101,8 @@ URI_careerjet = ("")
 #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
 #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
 #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
-#scrap_mojedelo(BeautifulSoup(requests.get(URI_mojedelo).text, 'html.parser'), insert_to_db_if_new_record)
-scrap_mojedelo(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
+scrap_mojedelo(BeautifulSoup(requests.get(URI_mojedelo).text, 'html.parser'), insert_to_db_if_new_record)
+#scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
 
 
 
