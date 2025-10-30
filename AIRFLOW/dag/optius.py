@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def scrap_specific_job(uri, push_to_db):
+def scrap_specific_job(uri, insert_to_db):
     webpage = requests.get(uri).text
     soup = BeautifulSoup(webpage, 'html.parser')
     job_section = soup.body.select_one('section.col.typography.job-detail-col.wholesize')
@@ -17,11 +17,21 @@ def scrap_specific_job(uri, push_to_db):
     qualifications  = "- " + "\n- ".join(li.get_text(strip=True).capitalize() for li in requirements[3].find_all("li"))
     description = intro + "\nOpis delovnega mesta:\n" + responsibilities + "\nPričakujejo:\n" + qualifications
 
-    push_to_db(company, location, description, uri)
+    insert_to_db(company, location, description, uri)
 
-def scrap_optius(soup, push_to_db):
-    job_list = soup.body.select_one('div.job-results').find("ul").find_all("li")
+def scrap_optius(soup, insert_to_db):
+
+    #job_list = soup.body.select_one('div.job-results').find("ul").find_all("li")
     
+    job_section = soup.body.select_one('div.job-results').find("ul")
+    
+    #No jobs today
+    if not job_section:
+        print("No jobs on Optius today")
+        return
+
+    job_list = job_section.find_all("li")
+
     job_links = []
 
     for job in job_list:
@@ -33,7 +43,7 @@ def scrap_optius(soup, push_to_db):
                 job_links.append("https://www.optius.com/" + a["href"])
                 break
     for uri in job_links:
-        scrap_specific_job(uri, push_to_db)
+        scrap_specific_job(uri, insert_to_db)
         break
             
                  

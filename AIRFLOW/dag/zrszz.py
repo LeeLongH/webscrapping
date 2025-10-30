@@ -80,7 +80,7 @@ def get_job_info(url, job_id):
     }
 
     response = requests.get(url, headers=headers, params=params, timeout=10)
-    print(f"[{job_id}] Status:", response.status_code)
+    #print(f"[{job_id}] Status:", response.status_code)
     
     if not response.text.strip():
         print(f"[{job_id}] has empty response.")
@@ -92,12 +92,12 @@ def get_job_info(url, job_id):
 
         return (description, location)
 
-def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, push_to_db, to_lower):
+def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db, to_lower):
     jobs_id, titles = get_jobs_id(URL1_ZRSZZ)
 
     for i in range(0, len(jobs_id)):
         description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
-        push_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)
+        insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)
 
 # Response Example
 """

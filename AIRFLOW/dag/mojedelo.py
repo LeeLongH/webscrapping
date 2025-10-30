@@ -3,7 +3,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-def scrap_specific_job(job_link, id, push_to_db):
+def scrap_specific_job(job_link, id):
     uri = "https://api.mojedelo.com/job-ads/" + id
 
     headers = {
@@ -26,11 +26,11 @@ def scrap_specific_job(job_link, id, push_to_db):
     }
 
     response = requests.get(uri, headers=headers)
-    print("s: ", response.status_code)
+    #print("s: ", response.status_code)
+
     if response.status_code == 200:
         data = response.json()
         info = data.get("data", {}).get("jobAdTranslations", {})
-        
         
         jobDescription  = info[0].get("jobDescription", {})
         weOffer         = info[0].get("weOffer", {})
@@ -38,15 +38,26 @@ def scrap_specific_job(job_link, id, push_to_db):
         aboutTheCompany = info[0].get("aboutTheCompany", {})
         adSummary       = info[0].get("adSummary", {})
 
-        tag_jobDescription  = BeautifulSoup(jobDescription  or "", 'html.parser')
-        tag_weOffer         = BeautifulSoup(weOffer         or "", 'html.parser')
-        tag_weExpect        = BeautifulSoup(weExpect        or "", 'html.parser')
-        tag_aboutTheCompany = BeautifulSoup(aboutTheCompany or "", 'html.parser')
-        tag_adSummary       = BeautifulSoup(adSummary       or "", 'html.parser')
+        text_jobDescription  = BeautifulSoup(jobDescription  or "", 'html.parser').get_text()
+        text_aboutTheCompany = BeautifulSoup(aboutTheCompany or "", 'html.parser').get_text()
+        text_adSummary       = BeautifulSoup(adSummary       or "", 'html.parser').get_text()
 
-        print(tag_weOffer.get_text())
+        tag_weOffer          = BeautifulSoup(weOffer         or "", 'html.parser')
+        tag_weExpect         = BeautifulSoup(weExpect        or "", 'html.parser')
 
-def scrap_mojedelo(soup, push_to_db):
+        text_weOffer = "- " + "\n- ".join(li.get_text(strip=True).capitalize() for li in tag_weOffer.find_all("li"))
+        text_weExpect = "- " + "\n- ".join(li.get_text(strip=True).capitalize() for li in tag_weExpect.find_all("li"))
+
+        description =  text_adSummary + "\n" + text_jobDescription + "\n" + text_weOffer + "\n" + text_weExpect + "\n" + text_aboutTheCompany
+
+        return description
+
+def scrap_mojedelo(insert_to_db):
+    job_link, id, title, location = scrap_jobs()
+    description = scrap_specific_job(job_link, id)
+    insert_to_db(title=title, location=location, uri=job_link, description=description)
+
+def scrap_jobs():
 
     uri = "https://api.mojedelo.com/job-ads-search"
     #?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260&pageSize=20&startFrom=0"
@@ -83,11 +94,11 @@ def scrap_mojedelo(soup, push_to_db):
             id = item.get("id")
             title = item.get("title")
             company = item.get("company").get("name")
-            description = item.get("adSummary")
+            #description = item.get("adSummary")
             location = item.get("town", {}).get("name")
             if location is None:
                 location = ", ".join([r.get("translation") for r in item.get("regions", [])])
-            print(f"{company}\n{title}\n{description}\n{location}\n\n")
+            #print(f"{company}\n{title}\n{description}\n{location}\n\n")
 
             base = "https://www.mojedelo.com/oglas/"
 
@@ -97,7 +108,11 @@ def scrap_mojedelo(soup, push_to_db):
             job_link = base + formated_title + "/" + id
             #print(job_link)
 
-            scrap_specific_job(job_link, id, push_to_db)
+            # Merge company name into location
+            location = company + ", " + location
+
+            return job_link, id, title, location
+            
     else:
         print("Error:", response.text[:500])
     

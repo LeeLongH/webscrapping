@@ -13,6 +13,7 @@ from studentski_servis import scrap_studentski_servis
 from zrszz import scrap_ZRSZZ
 from optius import scrap_optius
 from mojedelo import scrap_mojedelo
+from careerjet import scrap_careerjet
 
 # --- Firebase setup ---
 cred = credentials.Certificate("db-credentials.json")
@@ -41,7 +42,7 @@ def to_lower(str):
 
 # --- Shared functions ---
 
-def push_to_db(title, location, description, today_date, uri):
+def push_to_db(*, title, location, description, uri):
     ref.push({
         "title": title,
         "location": location,
@@ -61,7 +62,7 @@ def insert_to_db_if_new_record(title, location, description, uri=False):
     
     # push straight away if no prior records in DB
     if not records:
-        push_to_db(title, location,description, today_date)
+        push_to_db(title=title, location=location, description=description, uri=uri)
         return
 
     # loop thru sorted records
@@ -70,7 +71,7 @@ def insert_to_db_if_new_record(title, location, description, uri=False):
         record_date = datetime.strptime(record.get("date"), "%Y-%m-%d")
         if record_date < yesterday_date:
             # No new-ish record exists, add it to DB
-            push_to_db(title, location, description, today_date, uri)
+            push_to_db(title=title, location=location, description=description, uri=uri)
             break
         else:
             if  record.get("title") == title and \
@@ -92,7 +93,7 @@ URI_optius = ("https://www.optius.com/iskalci/prosta-delovna-mesta/?Keywords=&Fi
 
 URI_mojedelo = ("https://www.mojedelo.com/iskanje-zaposlitve?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260")
 
-URI_careerjet = ("")
+URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Osrednjeslovenska")
 
 #URI_webpage = URI_optius
 #webpage = requests.get(URI_webpage).text
@@ -101,8 +102,8 @@ URI_careerjet = ("")
 #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
 #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
 #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
-scrap_mojedelo(BeautifulSoup(requests.get(URI_mojedelo).text, 'html.parser'), insert_to_db_if_new_record)
-#scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
+#scrap_mojedelo(insert_to_db_if_new_record)
+scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
 
 
 
@@ -112,5 +113,5 @@ scrap_mojedelo(BeautifulSoup(requests.get(URI_mojedelo).text, 'html.parser'), in
 
 
 if __name__ == "__main__":
-    print("main executed")
+    print("\nmain executed")
 

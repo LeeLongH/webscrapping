@@ -1,73 +1,96 @@
 <!DOCTYPE html>
-<html class="notranslate" lang="sl" translate="no">
+<html dir="ltr" lang="sl">
  <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <meta content="notranslate" name="google"/>
-  <meta content="sl" http-equiv="Content-Language"/>
   <title>
-   Moje delo
+   Careerjet
   </title>
-  <script>
-   window.app = {
-        APP_VERSION: '0.0.3',
-      }
-      function initAppConfigPreload () {
-        let baseUrl = window.location.hostname;
-        let lang = '';
-        const langDash = window.location.pathname[0];
-        if(langDash === '/' && window.location.pathname[1] && (langDash === window.location.pathname[3] || !window.location.pathname[3])) {
-          lang = `/${window.location.pathname.slice(1, 3)}`
-        }
-        const apiUrl = 'https://api.mojedelo.com'
-        const globalPreload = document.createElement('link');
-        globalPreload.rel = 'preload';
-        globalPreload.href = `${apiUrl}/uploaded-files/config/${baseUrl}${lang}/jb.globals.js`;
-        globalPreload.as = 'script';
-        document.head.appendChild(globalPreload);
-        const employersPreload = document.createElement('link');
-        employersPreload.rel = 'preload';
-        employersPreload.href = `${apiUrl}/uploaded-files/config/${baseUrl}${lang}/jb.employers.js`;
-        employersPreload.as = 'script';
-        document.head.appendChild(employersPreload);
-      }
-      initAppConfigPreload()
-  </script>
-  <script async="" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js">
-  </script>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-  <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-control"/>
-  <meta content="no-cache" http-equiv="Pragma"/>
-  <link crossorigin="" href="/assets/vendor-ab426ba6.js" rel="modulepreload"/>
-  <link href="/assets/index-1c650925.css" rel="stylesheet"/>
+  <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport"/>
+  <style>
+   *{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+body{
+  font-size:16px;
+  font-family:sans-serif;
+}
+#cj{
+  margin:4rem auto;
+  width:100%;
+  max-width:300px;
+}
+h1{
+  font-size:1.25rem;
+  font-weight:700;
+  margin:1rem 0;
+}
+p{
+  font-size:.875rem;
+  margin:0 0 1rem 0;
+}
+#logo{
+  margin:0 auto 1rem auto;
+  max-width:230px;
+}
+#logo svg{
+  fill:#2062af;
+}
+#cjgre{
+  margin:0 auto;
+  max-width:300px;
+}
+  </style>
  </head>
- <body translate="no">
-  <script>
-   function initAppConfigLoad () {
-        let baseUrl = window.location.hostname;
-        let lang = '';
-        const langDash = window.location.pathname[0];
-        if(langDash === '/' && window.location.pathname[1] && (langDash === window.location.pathname[3] || !window.location.pathname[3])) {
-          lang = `/${window.location.pathname.slice(1, 3)}`
-        }
-        const apiUrl = 'https://api.mojedelo.com'
-        const globalScript = document.createElement('script');
-        globalScript.async = true
-        globalScript.src = `${apiUrl}/uploaded-files/config/${baseUrl}${lang}/jb.globals.js`;
-        document.body.appendChild(globalScript);
-        const employersScript = document.createElement('script');
-        employersScript.async = true
-        employersScript.src = `${apiUrl}/uploaded-files/config/${baseUrl}${lang}/jb.employers.js`;
-        document.body.appendChild(employersScript);
-      }
-      initAppConfigLoad()
-  </script>
-  <div class="notranslate" id="root" translate="no">
+ <body>
+  <div id="cj">
+   <div id="logo">
+    <svg viewbox="0 0 418 130" xmlns="http://www.w3.org/2000/svg">
+     <path d="M416 82a8 8 0 0 1-4.3-1.9 6 6 0 0 1-2-2.6c-.7-1.4-.7-2.7-.7-3.6V49h9V33h-9V0l-16 9v66c0 3.3 0 7.6.7 10a17.6 17.6 0 0 0 12.7 12.4c2.5.6 4.4.6 6.6.6h5V82ZM361 32c4.3 0 13.1 1.7 19.5 9.2C386.9 48.6 387 59 387 63c0 2.7-.3 5.3-1 8h-38c0 3.6 2.4 7 4.9 8.9a23 23 0 0 0 11.6 3.1 43.7 43.7 0 0 0 13.8-2.2l6.1 13.3a35 35 0 0 1-8.8 2.6A78 78 0 0 1 363 98c-2.3 0-15.6-.6-23.7-10a34 34 0 0 1-8.3-21.8V66a34.8 34.8 0 0 1 7.6-23.3A27.3 27.3 0 0 1 361 32Zm-2 15a10.3 10.3 0 0 0-8.4 3.7 12 12 0 0 0-2.1 3.8c-.5 1.5-.5 2.9-.5 4.5h22c0-1.2 0-3-.4-4.5a10.8 10.8 0 0 0-5.3-6.4c-1.4-.7-3.3-1.1-5.3-1.1Zm-58 67c.8 0 2.6.1 4.6-1.4 2-1.6 2.3-3.8 2.3-4 .2-1 .1-2 .1-2.6V33h16v78a19 19 0 0 1-19 19h-4v-16Zm25-98c0 3.1-1 5.5-3 7.3-2 1.8-4.3 2.7-7 2.7s-5-.9-7-2.7c-2-1.8-3-4.2-3-7.3 0-3.1 1-5.5 3-7.3 2-1.8 4.3-2.7 7-2.7s5 .9 7 2.7c2 1.8 3 4.2 3 7.3Zm-30 32.5a15 15 0 0 0-4.4-.5c-3.2.3-5.3 1.7-5.6 2v47h-16V35c1.1-.3 5.5-1.5 9-2.1a64.2 64.2 0 0 1 23 .1l-6 15.5ZM236 32c4.3 0 13.1 1.7 19.5 9.2C261.9 48.6 262 59 262 63c0 2.7-.3 5.3-1 8h-38c0 3.6 2.4 7 4.9 8.9a23 23 0 0 0 11.6 3.1 43.7 43.7 0 0 0 13.8-2.2l6.1 13.3a35 35 0 0 1-8.8 2.6A78 78 0 0 1 238 98c-2.3 0-15.6-.6-23.7-10a34 34 0 0 1-8.3-21.8V66a34.8 34.8 0 0 1 7.6-23.3A27.3 27.3 0 0 1 236 32Zm-2 15a10.3 10.3 0 0 0-8.4 3.7 12 12 0 0 0-2.1 3.8c-.5 1.5-.5 2.9-.5 4.5h22c0-1.2 0-3-.4-4.5a10.8 10.8 0 0 0-5.3-6.4c-1.4-.7-3.3-1.1-5.3-1.1Zm-59-15c4.3 0 13.1 1.7 19.5 9.2C200.9 48.6 201 59 201 63c0 2.7-.3 5.3-1 8h-38c0 3.6 2.4 7 4.9 8.9a23 23 0 0 0 11.6 3.1 43.7 43.7 0 0 0 13.8-2.2l6.1 13.3a35 35 0 0 1-8.8 2.6A78 78 0 0 1 177 98c-2.3 0-15.6-.6-23.7-10a34 34 0 0 1-8.3-21.8V66a34.8 34.8 0 0 1 7.6-23.3A27.3 27.3 0 0 1 175 32Zm-2 15a10.3 10.3 0 0 0-8.4 3.7 12 12 0 0 0-2.1 3.8c-.5 1.5-.5 2.9-.5 4.5h22c0-1.2 0-3-.4-4.5a10.8 10.8 0 0 0-5.3-6.4c-1.4-.7-3.3-1.1-5.3-1.1Zm-32 1.5a15 15 0 0 0-4.4-.5c-3.2.3-5.3 1.7-5.6 2v47h-16V35c1.1-.3 5.5-1.5 9-2.1a64.2 64.2 0 0 1 23 .1l-6 15.5Zm-52.2-16a22.7 22.7 0 0 1 10.7 5.9A22.2 22.2 0 0 1 106 52l.1 4.9v38.5s-7.5 1.3-15.8 2c-8.4.6-15.8.5-17.2.5-1.4 0-7-.3-11.5-3.2A20.7 20.7 0 0 1 52 78c0-1.7 0-9 6-15s13.1-6 14-6c.8 0 3.7 0 8.7.3l9.3.7v-2.5c0-1.7-.5-4.4-2.5-6-2-1.6-5-2.5-9.8-2.5a38.6 38.6 0 0 0-13 2.2L59 36c3-1.4 7.8-2.5 14.3-3.3 9.7-1.3 14.5-.4 15.5-.2ZM76 85c1 0 3 0 5-.2l9-.8V71l-9-.8c-2.1-.2-3.3-.2-5-.2-5 0-9 3.4-9 7.5s4 7.5 9 7.5ZM50 39c-5.2-4.4-11.8-7-19-7C13.9 32 0 46.8 0 65a34 34 0 0 0 9.6 23.9 30 30 0 0 0 20.4 9l1 .1a30.1 30.1 0 0 0 19-7L40 79c-2.3 2-5.3 3-9 3-6 0-15-5-15-17s9-17 15-17c3.7 0 6.7 1 9 3l10-12Z">
+     </path>
+    </svg>
+   </div>
+   <div id="cjgre">
+   </div>
+   <h1>
+    O tej strani
+   </h1>
+   <p>
+    Naši sistemi so zaznali nenavaden promet iz vašega raèunalniškega omrežja. Ta stran preverja, ali ste zahteve resnièno poslali vi in ne robot.
+   </p>
+   <p>
+    IP-naslov: 188.230.200.73
+   </p>
   </div>
-  <script>
-   const global = globalThis
+  <script async="" defer="" src="https://www.google.com/recaptcha/api.js?onload=cjcb&amp;render=explicit&amp;hl=sl">
   </script>
-  <script crossorigin="" defer="" src="/assets/index-e458b26a.js" type="module">
+  <script>
+   var cjcb = function(){
+    grecaptcha.render('cjgre', {
+      'sitekey': '6LdIthAjAAAAAOYrRFlr-CtJsWiB7X6Bhlj62BgL',
+      'callback': function (response) {
+        
+        var data = new FormData();
+        data.set('r', response);
+      
+        fetch(
+          '/bi-verify',
+          {
+            method: 'post',
+            body: data,
+            cache: 'no-cache',
+          }
+        ).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+          
+          window.location.reload();
+        });
+        
+      }
+    });
+  };
   </script>
  </body>
 </html>
