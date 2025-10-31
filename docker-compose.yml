@@ -1,11 +1,10 @@
-version: '3'
-
 services:
   webscrapping:
-    image: webscrapping:latest
+    image: dagjobswebscrapping:latest
 
     volumes:
       - ./AIRFLOW:/opt/airflow
+      - ./requirements.txt:/tmp/requirements.txt
 
     ports:
       - "8080:8080"
