@@ -6,9 +6,12 @@ USER root
 RUN apt-get update && \
     apt-get -y install git && \
     apt-get clean
-    
-# Install Python packages required by your DAGs
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+# Switch to airflow user
 USER airflow
+
+# Copy requirements into container
+COPY requirements.txt /tmp/requirements.txt
+
+# Install packages into Airflow's virtualenv
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

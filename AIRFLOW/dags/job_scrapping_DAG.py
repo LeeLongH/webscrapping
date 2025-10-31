@@ -19,7 +19,7 @@ dag = DAG(
 
 # Print DAG started
 start_msg = PythonOperator(
-    task_id = 'webscrapping.py',
+    task_id = 'start_dag',
     python_callable = lambda: print('DAG started!'),
     dag=dag
 )
@@ -33,7 +33,7 @@ call_webscrapping= PythonOperator(
 
 # Print DAG finished
 finish_msg = PythonOperator(
-    task_id = 'webscrapping.py',
+    task_id = 'finish_dag',
     python_callable = lambda: print('DAG finished!'),
     dag=dag
 )

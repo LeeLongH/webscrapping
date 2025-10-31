@@ -20,7 +20,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 # --- CONFIG ---
-URI_CAREERJET = "https://www.careerjet.si/delovna-mesta?s=podatkovni+in%C5%BEenir&l=Slovenija"  # example; change query/location
+URI_CAREERJET = "https://www.careerjet.si/delovna-mesta?s=podatkovni+in%C5%BEenir&l=Slovenija" 
+#https://www.careerjet.si/delovna-mesta?s=podatkovni+in%C5%BEenir&l=Slovenija&nw=1
 COOKIES_FILE = "careerjet_cookies.pkl"
 OUT_HTML = "out.html"
 WAIT_TIMEOUT = 30  # seconds to wait for you to solve captcha and page to load
@@ -91,31 +92,36 @@ def parse_jobs(html):
     """Parse job results from HTML with BeautifulSoup. Customize selectors to match Careerjet structure."""
     soup = BeautifulSoup(html, "html.parser")
 
-    # Example: try a few likely selectors and print results
-    selectors_to_try = [
-        ".job",               # generic
-        ".searchResult",      # some sites
-        ".result",            # fallback
-        ".job_listing",       # WordPress-style
-        ".listing"            # other
-    ]
+    print("/" * 50)
 
-    found = []
-    for sel in selectors_to_try:
-        items = soup.select(sel)
-        if items:
-            print(f"\nFound {len(items)} items with selector `{sel}` — parsing a few examples.")
-            for job in items[:20]:  # limit for demo
-                title = job.select_one("a") or job.select_one(".title") or job.select_one("h2") or job.select_one("h3")
-                link = title["href"] if title and title.has_attr("href") else None
-                text = (title.get_text(strip=True) if title else job.get_text(" ", strip=True))[:200]
-                found.append({"selector": sel, "title": text, "link": link})
-            break
+    items = soup.select(".job.clicky")
+    if items:
+        print(f"\nFound {len(items)} jobs.")
+        for job in items[:3]:  # limit for demo
+            title = job.select_one("a") or job.select_one(".title") or job.select_one("h2") or job.select_one("h3")
 
-    if not found:
+            link = title["href"] if title and title.has_attr("href") else None
+
+            # Get description (closest .desc after this header)
+            desc_tag = job.find("div", class_="desc")
+            desc = desc_tag.get_text(strip=True) if desc_tag else None
+
+            # Get location (inside <ul class="location">)
+            loc_tag = job.find_next("ul", class_="location")
+            location = loc_tag.get_text(strip=True) if loc_tag else None
+
+            print(f"Title: {title.text.strip()}")
+            print(f"Link: {link}")
+            print(f"Location: {location}")
+            print(f"Description: {desc}")
+            print("-" * 50)
+
+            #found.append({"selector": sel, "title": text, "link": link})
+
+    #if not found:
         # fallback: return entire page for inspection
-        print("No job-listing selectors matched. Dumping HTML so you can inspect and adapt selectors.")
-    return found, soup
+        #print("No job-listing selectors matched. Dumping HTML so you can inspect and adapt selectors.")
+    return soup
 
 # --- main flow ---
 def main():
@@ -151,13 +157,7 @@ def main():
         print("Saved HTML to", OUT_HTML)
 
         # Parse with BeautifulSoup (and show some sample results)
-        found, soup = parse_jobs(html)
-        if found:
-            for i, j in enumerate(found[:20], 1):
-                print(f"{i}. {j['title']}\n   link: {j['link']}\n")
-        else:
-            print("No jobs parsed. Inspect the saved file ( car.html) and pick a correct CSS selector to parse.")
-            print("Open out.html in your browser and use Inspect Element to find the container & link/title selectors.")
+        soup = parse_jobs(html)
 
     finally:
         print("Keeping browser open for 5 seconds; it will close after that.")

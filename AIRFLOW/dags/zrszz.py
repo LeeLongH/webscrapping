@@ -1,6 +1,4 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import requests
 
 headers = {
@@ -88,7 +86,9 @@ def get_job_info(url, job_id):
         data = response.json()
 
         description = data.get("opisDelInNalog")
-        location = f"{data.get("delodajalec")}, {data.get("delodajalecNaslov")}"
+        delodajalec = data.get("delodajalec")
+        delodajalecNaslov = data.get("delodajalecNaslov")
+        location = f"{delodajalec}, {delodajalecNaslov}"
 
         return (description, location)
 

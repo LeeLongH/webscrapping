@@ -1,10 +1,11 @@
 services:
   webscrapping:
     image: dagjobswebscrapping:latest
-
+    restart: always
     volumes:
-      - ./AIRFLOW:/opt/airflow
-      - ./requirements.txt:/tmp/requirements.txt
+      - ./AIRFLOW/dags:/opt/airflow/dags
+      - ./AIRFLOW/logs:/opt/airflow/logs
+      - ./db-credentials.json:/opt/airflow/db-credentials.json
 
     ports:
       - "8080:8080"

@@ -13,11 +13,16 @@ from studentski_servis import scrap_studentski_servis
 from zrszz import scrap_ZRSZZ
 from optius import scrap_optius
 from mojedelo import scrap_mojedelo
-#from careerjet import scrap_careerjet
+from careerjet import scrap_careerjet
 
 def run_webscrapping():
+
     # --- Firebase setup ---
-    cred = credentials.Certificate("db-credentials.json")
+    if __name__ == "__main__":
+        cred = credentials.Certificate("db-credentials.json")
+    else:
+        cred = credentials.Certificate("/opt/airflow/db-credentials.json")
+
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://webscrapping-student-default-rtdb.europe-west1.firebasedatabase.app/"
     })
@@ -100,13 +105,15 @@ def run_webscrapping():
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
-    scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
+    #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
     #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
     #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
     #scrap_mojedelo(insert_to_db_if_new_record)
-    #scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
+    scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
+
+
 
 
 if __name__ == "__main__":
-    print("\nmain executed")
+    run_webscrapping()
 
