@@ -27,7 +27,7 @@ def scrap_optius(soup, insert_to_db):
     
     #No jobs today
     if not job_section:
-        print("No jobs on Optius today")
+        print(f"{'Optius':<10}: 0 jobs")
         return
 
     job_list = job_section.find_all("li")
@@ -42,6 +42,9 @@ def scrap_optius(soup, insert_to_db):
             if a.has_attr("href"):
                 job_links.append("https://www.optius.com/" + a["href"])
                 break
+
+    print(f"{'Optius':<10}: {len(job_links)} jobs")
+
     for uri in job_links:
         scrap_specific_job(uri, insert_to_db)
         break

@@ -5,7 +5,7 @@ def scrap_studentski_servis(soup, insert_to_db, to_lower):
     """
         
     articles = soup.body.main.find_all("article")
-
+    print(f"{'stud.serv.':<10}: {len(articles)} jobs")
     for article in articles:
         article_content = article.div.div
         titles = article_content.find_all('h5')

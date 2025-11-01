@@ -44,7 +44,7 @@ def get_jobs_id(url):
 
     response = requests.post(url, headers=headers, params=params, json=payload)
 
-    print("Status code:", response.status_code)
+    #print("Status code:", response.status_code)
 
     # Get jobs id and titles
     jobs_id = []
@@ -95,6 +95,7 @@ def get_job_info(url, job_id):
 def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db, to_lower):
     jobs_id, titles = get_jobs_id(URL1_ZRSZZ)
 
+    print(f"{'zrszz':<10}: {len(jobs_id)} jobs")
     for i in range(0, len(jobs_id)):
         description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
         insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)

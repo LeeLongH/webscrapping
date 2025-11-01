@@ -87,9 +87,6 @@ def run_webscrapping():
                     print(f"Record {title[0:13]} exists in DB")
                     break
 
-
-    # STUDENTKSI SERVIS ////////////////////////////////////////////////////////////////
-
     URI_studentski_servis = ("https://www.studentski-servis.com/studenti/prosta-dela?isci=1&dd1=1&dm1s=1&skD[]=004&skD[]=A832&skD[]=A210&skD[]=A055&skD[]=A078&skD[]=A090&skD[]=A095&hourlyratefrom=6.32&hourlyrateto=36&hourly_rate=6.32%3B26&regija[]=ljubljana-z-okolico&regija[]=domzale-kamnik")
 
     URL1_ZRSZZ = ("https://apigateway-osk8sdmz.ess.gov.si/iskalnik-po-pdm/v1/delovno-mesto/prosta-delovna-mesta-filtri")
@@ -97,19 +94,24 @@ def run_webscrapping():
 
     URI_optius = ("https://www.optius.com/iskalci/prosta-delovna-mesta/?Keywords=&Fields%5B%5D=37&Regions%5B%5D=26&Time=1&doSearch=")
 
-    URI_mojedelo = ("https://www.mojedelo.com/iskanje-zaposlitve?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260")
+    #URI_mojedelo = ("https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260&pageSize=20&startFrom=0")
+    #URI_mojedelo="https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=a0c0fd2d-0328-4303-8e56-98fadf781d9c&pageSize=20&startFrom=0"
+    URI_mojedelo="https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&pageSize=20&startFrom=0"
 
-    URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Osrednjeslovenska")
+
+
+
+    URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Slovenija&nw=1")
 
     #URI_webpage = URI_optius
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
-    #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
-    #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
-    #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
-    #scrap_mojedelo(insert_to_db_if_new_record)
-    scrap_careerjet(BeautifulSoup(requests.get(URI_careerjet).text, 'html.parser'), insert_to_db_if_new_record)
+    scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
+    scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
+    scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
+    scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
+    scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
 
 
 

@@ -1,11 +1,3 @@
-"""
-careerjet_selenium.py
-Open Careerjet in a real browser, let you solve the captcha manually,
-save cookies to reuse session, then fetch page HTML and parse with BeautifulSoup.
-
-Adjust the CSS selectors in `parse_jobs()` to match Careerjet's current HTML.
-"""
-
 import time
 import pickle
 import os
@@ -18,15 +10,8 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-
-# --- CONFIG ---
-URI_CAREERJET = "https://www.careerjet.si/delovna-mesta?s=podatkovni+in%C5%BEenir&l=Slovenija" 
-#https://www.careerjet.si/delovna-mesta?s=podatkovni+in%C5%BEenir&l=Slovenija&nw=1
 COOKIES_FILE = "careerjet_cookies.pkl"
-OUT_HTML = "out.html"
-WAIT_TIMEOUT = 30  # seconds to wait for you to solve captcha and page to load
 
-# --- helpers ---
 def save_cookies(driver, path):
     with open(path, "wb") as f:
         pickle.dump(driver.get_cookies(), f)
@@ -52,118 +37,94 @@ def start_browser():
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
     )
 
-    # Use Service to specify driver path
     from selenium.webdriver.chrome.service import Service
     from webdriver_manager.chrome import ChromeDriverManager
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
-    driver.maximize_window()
+    #driver.maximize_window()
     return driver
 
-def wait_for_human_and_page(driver):
-    """
-    Wait for either a known job-list container to appear or for the user to press ENTER in terminal.
-    We try to detect a job-listing element automatically; if not found, we ask the user to press ENTER when they solved the CAPTCHA.
-    """
-    try:
-        # Try to wait for a job-list container — you'll likely need to customize this selector to the site.
-        # Common candidate selectors: ".job", ".job_listing", ".result", ".searchResult", etc.
-        candidate_selectors = [
-            ".job", ".job-click", ".job-item", ".searchResult", ".search-result", ".joblisting", ".search-results"
-        ]
-        wait = WebDriverWait(driver, WAIT_TIMEOUT)
-        for sel in candidate_selectors:
-            try:
-                wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, sel)))
-                print(f"Detected page content via selector `{sel}`.")
-                return
-            except Exception:
-                pass
+def parse_specific_job(uri):
+    driver = start_browser()
+    driver.get(uri)
 
-        # If we didn't detect a job container automatically, fall back to manual confirmation:
-        print("\nCouldn't auto-detect job listings. Please solve the CAPTCHA in the opened browser.")
-        print("When you've solved it and the search results are visible, press ENTER here to continue.")
-        input("Press ENTER after captcha is solved and results are visible...")
-    except Exception as e:
-        print("Waiting interrupted:", e)
-
-def parse_jobs(html):
-    """Parse job results from HTML with BeautifulSoup. Customize selectors to match Careerjet structure."""
+    html = driver.page_source
     soup = BeautifulSoup(html, "html.parser")
 
-    print("/" * 50)
+    section = soup.find("section", class_="content")
+    if section:
+        # Handle unordered lists separately
+        for ul in section.find_all("ul"):
+            items = []
+            for li in ul.find_all("li"):
+                items.append(li.get_text(strip=True))
+            # Replace <ul> with newline-separated text
+            ul.replace_with("\n".join(items))
+
+        description = section.get_text("\n", strip=True)
+    else:
+        description = None
+
+    return description
+
+def parse_jobs(html, insert_to_db):
+    soup = BeautifulSoup(html, "html.parser")
 
     items = soup.select(".job.clicky")
+    print(f"{'Careerjet':<10}: {len(items)} jobs")
+
     if items:
-        print(f"\nFound {len(items)} jobs.")
-        for job in items[:3]:  # limit for demo
+        
+        for job in items[:10]:  # 10 jobs as limit
+
             title = job.select_one("a") or job.select_one(".title") or job.select_one("h2") or job.select_one("h3")
-
-            link = title["href"] if title and title.has_attr("href") else None
-
-            # Get description (closest .desc after this header)
-            desc_tag = job.find("div", class_="desc")
-            desc = desc_tag.get_text(strip=True) if desc_tag else None
+            
+            # Get short description (part of long description)
+            #desc_tag = job.find("div", class_="desc")
+            #desc = desc_tag.get_text(strip=True) if desc_tag else None
 
             # Get location (inside <ul class="location">)
             loc_tag = job.find_next("ul", class_="location")
             location = loc_tag.get_text(strip=True) if loc_tag else None
 
-            print(f"Title: {title.text.strip()}")
-            print(f"Link: {link}")
-            print(f"Location: {location}")
-            print(f"Description: {desc}")
-            print("-" * 50)
+            link = title["href"] if title and title.has_attr("href") else None
+            desciption = parse_specific_job("https://www.careerjet.si" + link)
 
-            #found.append({"selector": sel, "title": text, "link": link})
+            #print(f"Title: {title.text.strip()}")
+            #print(f"Link: {link}")
+            #print(f"Location: {location}")
+            #print(f"desc.: {desc}")
+            #print(f"desciption: {desciption}")
+            insert_to_db(title, location, desciption, link)
 
-    #if not found:
-        # fallback: return entire page for inspection
-        #print("No job-listing selectors matched. Dumping HTML so you can inspect and adapt selectors.")
-    return soup
-
-# --- main flow ---
-def main():
+def scrap_careerjet(URI_careerjet, insert_to_db):
     driver = start_browser()
     try:
         driver.get("https://www.careerjet.si/")  # first visit to set domain for cookies
         # If we have saved cookies from a previous run, try loading them to reuse session:
         if os.path.exists(COOKIES_FILE):
-            print("Loading cookies from previous session...")
+            #print("Loading cookies from previous session...")
             try:
                 load_cookies(driver, COOKIES_FILE)
                 time.sleep(1)
-                driver.get(URI_CAREERJET)  # reload after cookies set
+                driver.get(URI_careerjet)  # reload after cookies set
             except Exception as e:
                 print("Could not load cookies:", e)
         else:
-            driver.get(URI_CAREERJET)
-
-        # Wait for the page content or manual captcha solve
-        wait_for_human_and_page(driver)
+            driver.get(URI_careerjet)
 
         # Save cookies for future runs
         try:
             save_cookies(driver, COOKIES_FILE)
-            print("Cookies saved to", COOKIES_FILE)
+            #print("Cookies saved to", COOKIES_FILE)
         except Exception as e:
-            print("Could not save cookies:", e)
+            #print("Could not save cookies:", e)
+            pass
 
-        # Grab HTML and save to file
         html = driver.page_source
-        with open(OUT_HTML, "w", encoding="utf-8") as f:
-            f.write(html)
-        print("Saved HTML to", OUT_HTML)
-
-        # Parse with BeautifulSoup (and show some sample results)
-        soup = parse_jobs(html)
+        parse_jobs(html, insert_to_db)
 
     finally:
-        print("Keeping browser open for 5 seconds; it will close after that.")
-        time.sleep(5)
+        #time.sleep(1)
         driver.quit()
-
-if __name__ == "__main__":
-    main()
-

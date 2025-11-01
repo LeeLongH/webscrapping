@@ -1,9 +1,9 @@
-
 import requests
 import re
 from bs4 import BeautifulSoup
+import httpx
 
-def scrap_specific_job(job_link, id):
+def scrap_specific_job(job_link, id, today_id):
     uri = "https://api.mojedelo.com/job-ads/" + id
 
     headers = {
@@ -20,7 +20,7 @@ def scrap_specific_job(job_link, id):
     params = {
         "jobCategoryIds": "64f003ff-6d8b-4be0-b58c-4580e4eeeb8a",
         "regionIds": "d1dce9b1-9fa4-438b-b582-10d371d442e6",
-        "jobAdPostingDateId": "3fafe213-6f6c-4fff-b07b-4747daf62260",
+        "jobAdPostingDateId": today_id,
         "pageSize": 20,
         "startFrom": 0
     }
@@ -52,16 +52,8 @@ def scrap_specific_job(job_link, id):
 
         return description
 
-def scrap_mojedelo(insert_to_db):
-    job_link, id, title, location = scrap_jobs()
-    description = scrap_specific_job(job_link, id)
-    insert_to_db(title=title, location=location, uri=job_link, description=description)
+def scrap_jobs(uri, today_id):
 
-def scrap_jobs():
-
-    uri = "https://api.mojedelo.com/job-ads-search"
-    #?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260&pageSize=20&startFrom=0"
-    
     headers = {
         "accept": "application/json, text/plain, */*",
         "accept-language": "sl-SI,sl;q=0.9,en-GB;q=0.8,en;q=0.7",
@@ -76,20 +68,23 @@ def scrap_jobs():
     params = {
         "jobCategoryIds": "64f003ff-6d8b-4be0-b58c-4580e4eeeb8a",
         "regionIds": "d1dce9b1-9fa4-438b-b582-10d371d442e6",
-        "jobAdPostingDateId": "3fafe213-6f6c-4fff-b07b-4747daf62260",
+        "jobAdPostingDateId": today_id,
         "pageSize": 20,
         "startFrom": 0
     }
 
     response = requests.get(uri, headers=headers, params=params)
+    #with httpx.Client(http2=True) as client:
+        #response = client.get(uri, headers=headers, params=params)
 
-    print("Status:", response.status_code)
 
+    #print("Status:", response.status_code)
     if response.status_code == 200:
         data = response.json()
         items = data.get("data", {}).get("items", [])
 
-        print(f"Found {len(items)} job ads:\n")
+        print(f"{'mojedelo':<10}: {len(items)} jobs")
+
         for item in items:
             id = item.get("id")
             title = item.get("title")
@@ -112,9 +107,59 @@ def scrap_jobs():
             location = company + ", " + location
 
             return job_link, id, title, location
-            
+        
     else:
         print("Error:", response.text[:500])
     
+    return (False, False, False, False)
+    
+def get_todays_UUID():
+    uri = "https://api.mojedelo.com/taxonomy/job-ad-posting-dates"
 
+    headers = {
+        "accept": "application/json, text/plain, */*",
+        "tenantid": "5947a585-ad25-47dc-bff3-f08620d1ce17",
+        "languageid": "db3c58e6-a083-4f72-b30b-39f2127bb18d",
+        "channelid": "8805c1b8-a0a9-4f57-ad42-329af3c92a61",
+        "user-agent": "Mozilla/5.0",
+    }
+
+    response = requests.get(uri, headers=headers)
+    data = response.json()
+
+    """
+    {
+    "data": {
+        "items": [
+                    {
+                        "id": "3fafe213-6f6c-4fff-b07b-4747daf62260",
+                        "nameTranslation": "Zadnjih 24 ur"
+                    },
+                    {
+                        "id": "a0c0fd2d-0328-4303-8e56-98fadf781d9c",
+                        "nameTranslation": "Zadnjih 48 ur"
+                    },
+                    {
+                        "id": "464312df-f4ba-4bc9-8041-2c5e0a85763b",
+                        "nameTranslation": "Zadnjih 72 ur"
+                    }
+                ]
+            }
+    }
+    """
+    # [0] = Zadnjih 24 ur
+    # [1] = Zadnjih 48 ur
+    # [2] = Zadnjih 72 ur
+    today_uuid = data["data"]["items"][0]["id"]
+
+    return today_uuid
+
+def scrap_mojedelo(uri, insert_to_db):
+    today_id = get_todays_UUID()
+    #print("id: ", today_id)
+    job_link, id, title, location = scrap_jobs(uri, today_id)
+    if not job_link:
+        return
+    description = scrap_specific_job(job_link, id, today_id)
+    insert_to_db(title=title, location=location, uri=job_link, description=description)
 
