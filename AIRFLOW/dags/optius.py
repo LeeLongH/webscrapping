@@ -1,3 +1,18 @@
+"""
+
+Find today's job posts from:
+
+https://www.optius.com/iskalci/prosta-delovna-mesta/?Keywords=&Fields%5B%5D=37&
+Regions%5B%5D=26&doSearch=&Time=&Types%5B%5D=6&Types%5B%5D=7&Hours%5B%5D=8
+
+(tick "last 24h" option)
+
+using BeautifulSoup and REST API.
+
+Insert job posts into Firebase if the entry there doesnt exist
+
+"""
+
 import requests
 from bs4 import BeautifulSoup
 

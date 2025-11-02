@@ -1,3 +1,16 @@
+"""
+
+Find today's job posts from:
+
+https://www.ess.gov.si/iskalci-zaposlitve/iskanje-zaposlitve/iskanje-dela/#
+/?iskalniTekst=&iskalnaLokacija=&drzava=SI,&datObj=TODAY,&pokPod=0020,&regija=Osrednjeslovenska,
+
+using BeautifulSoup and REST API.
+
+Insert job posts into Firebase if the entry there doesnt exist
+
+"""
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -54,9 +67,9 @@ def get_jobs_id(url):
         for job in data.get("seznamDelovnihMest", []):
             jobs_id.append(job.get("idDelovnoMesto"))
             titles.append(job.get("nazivDelovnegaMesta"))
-            print(job.get("nazivDelovnegaMesta"))
-            print(job.get("delodajalec"))
-            print(job.get("delodajalecNaslov"))
+            #print(job.get("nazivDelovnegaMesta"))
+            #print(job.get("delodajalec"))
+            #print(job.get("delodajalecNaslov"))
     else:
         print("Failed:", response.text)
     #print(jobs_id)
@@ -68,7 +81,6 @@ def get_job_info(url, job_id):
         Fetch today's job comprehensive info
         INPUT: job id
         OUTPUT: job description and location
-
     """
     api_key = "5ab0803785c1c97d8e3331d671fcbaa9"
 
@@ -100,7 +112,7 @@ def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db, to_lower):
         description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
         insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)
 
-# Response Example
+# Response Example of "get_jobs_id(URL1_ZRSZZ)"
 """
 get_jobs_id:
 {'idDelovnoMesto': '3349316', 
@@ -119,7 +131,10 @@ get_jobs_id:
 'poklic': 'Sistemski administratorji', 
 'datumSpremembe': '2025-10-24T11:08:00+02:00', 
 'ikonaNegativnaReferenca': 'NE'}
+"""
 
+# Response Example of "get_job_info(URL2_ZRSZZ, jobs_id[i])"
+"""
 get_job_info:
 {'idDelovnoMesto': '3348232', 
 'registerskaStevilka': 'PX38740', 

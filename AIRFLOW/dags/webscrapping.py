@@ -32,6 +32,30 @@ def run_webscrapping():
     today_date = datetime.today().strftime("%Y-%m-%d")
     yesterday_date = (datetime.today() - timedelta(days=1))
 
+    def get_todays_jobs():
+        """
+        Fetch all Firebase jobs where 'date' equals today.
+        Returns a list of dicts with fields: title, location, description, uri.
+        """
+        jobs_ref = db.reference("/")  # replace 'jobs' with your collection name
+
+        #query = jobs_ref.where("date", "==", today_date)
+        query = jobs_ref.where("date", "<=", today_date)
+        docs = query.stream()
+        
+        jobs = []
+        for doc in docs:
+            data = doc.to_dict()
+            jobs.append({
+                "title": data.get("title", "No title"),
+                "location": data.get("location", "No location"),
+                "description": data.get("description", "No description"),
+                "uri": data.get("uri", "No link")
+            })
+
+        return jobs
+
+
     def to_lower(str):
 
         if not str:
@@ -46,8 +70,6 @@ def run_webscrapping():
         str = reduce(lambda a, kv: a.replace(*kv), dict, str).capitalize()
         return str
 
-    # --- Shared functions ---
-
     def push_to_db(*, title, location, description, uri):
         ref.push({
             "title": title,
@@ -57,10 +79,6 @@ def run_webscrapping():
             "date": today_date
         })
         print(f"{title[:10]} pushed to DB")
-
-
-
-        # Send webscrapped data from STUDETNSKI SERVIS to firebase
 
     def insert_to_db_if_new_record(title, location, description, uri=False):
         # Get newest 10 records from DB
@@ -94,12 +112,8 @@ def run_webscrapping():
 
     URI_optius = ("https://www.optius.com/iskalci/prosta-delovna-mesta/?Keywords=&Fields%5B%5D=37&Regions%5B%5D=26&Time=1&doSearch=")
 
-    #URI_mojedelo = ("https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260&pageSize=20&startFrom=0")
-    #URI_mojedelo="https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&jobAdPostingDateId=a0c0fd2d-0328-4303-8e56-98fadf781d9c&pageSize=20&startFrom=0"
+    # Incomplete URI with missing UUID date for job post query. URI gets correctly filled up inside mojdelo.py after API call inquiring today's UUID
     URI_mojedelo="https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&pageSize=20&startFrom=0"
-
-
-
 
     URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Slovenija&nw=1")
 
@@ -107,15 +121,20 @@ def run_webscrapping():
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
-    print("aaaaaaaaaaaaaaaaaaaaa")
-    scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
+    #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
     #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
     #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
     #scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
     #scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
 
     with open("/opt/airflow/logs/log.txt", "w") as f:
-        f.write(str(datetime.now()))
+        log = "Great success: " + str(datetime.now())
+        f.write(log)
+
+    # Get today's Firebase jobs
+    todays_jobs = get_todays_jobs()
+     # Return results so DAG can include them in email
+    return {"jobs": todays_jobs}
 
 
 if __name__ == "__main__":

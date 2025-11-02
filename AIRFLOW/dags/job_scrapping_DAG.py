@@ -1,28 +1,29 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.email import EmailOperator
+from airflow.utils.trigger_rule import TriggerRule
+
 from datetime import datetime, timedelta
 
-from datetime import datetime
-
 from webscrapping import run_webscrapping
+from format_mail import compose_email
 
 default_args = {
-    'start_date': datetime.now() - timedelta(days=1)
+    'start_date': datetime.now() - timedelta(days=1),
+    'email_on_failure': True,  # send email on failure
+    'email_on_retry': False,   # optional: disable email on retry
+    'email': ['recipient@example.com'],  # replace with your email
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
 }
+
 
 dag = DAG(
     'Job_Scrapping',
     default_args=default_args,
-    #schedule='0 18 * * *',
-    schedule='0 12 * * *',
+    schedule='0 18 * * *',
+    #schedule='32 13 * * *',
     catchup=False
-)
-
-# Print DAG started
-start_msg = PythonOperator(
-    task_id = 'start_dag',
-    python_callable = lambda: print('DAG started!'),
-    dag=dag
 )
 
 # proceede with webscrapping
@@ -32,11 +33,12 @@ call_webscrapping= PythonOperator(
     dag=dag
 )
 
-# Print DAG finished
-finish_msg = PythonOperator(
-    task_id = 'finish_dag',
-    python_callable = lambda: print('DAG finished!'),
+# Send an email
+send_email = PythonOperator(
+    task_id='send_email',
+    python_callable=compose_email,
+    trigger_rule='all_done',    
     dag=dag
 )
 
-start_msg >> call_webscrapping >> finish_msg
+call_webscrapping >> send_email

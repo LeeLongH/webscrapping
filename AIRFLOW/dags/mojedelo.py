@@ -1,3 +1,17 @@
+"""
+
+Find today's job posts from:
+
+https://www.mojedelo.com/iskanje-zaposlitve?jobCategoryIds=64f003ff-6d8b-
+4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6
+&jobAdPostingDateId=3fafe213-6f6c-4fff-b07b-4747daf62260
+
+using BeautifulSoup and REST API.
+
+Insert job posts into Firebase if the entry there doesnt exist
+
+"""
+
 import requests
 import re
 from bs4 import BeautifulSoup
