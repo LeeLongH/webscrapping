@@ -33,3 +33,5 @@ pip list | grep -e firebase -e firebase-admin -e beautifulsoup4 -e selenium
 docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
 python -m pip show firebase-admin
 python -m pip show beautifulsoup4
+
+docker exec -it dag_jobs_webscrapping-webscrapping-1 airflow dags trigger Job_Scrapping

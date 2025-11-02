@@ -9,6 +9,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.chrome import ChromeType
 
 COOKIES_FILE = "careerjet_cookies.pkl"
 
@@ -29,6 +33,7 @@ def load_cookies(driver, path):
             pass
 
 def start_browser():
+    """
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -43,6 +48,22 @@ def start_browser():
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     #driver.maximize_window()
+    return driver
+    """
+    options = Options()
+    options.add_argument("--headless")  # keep headless in container
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142 Safari/537.36"
+    )
+
+    # Use ChromeType.CHROMIUM to match container's /usr/bin/chromium
+    service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+    driver = webdriver.Chrome(service=service, options=options)
     return driver
 
 def parse_specific_job(uri):

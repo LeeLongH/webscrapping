@@ -1,13 +1,15 @@
 services:
   webscrapping:
-    image: dagjobswebscrapping:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - ./AIRFLOW/dags:/opt/airflow/dags
       - ./AIRFLOW/logs:/opt/airflow/logs
       - ./db-credentials.json:/opt/airflow/db-credentials.json
+      - ./AIRFLOW/simple_auth_manager_passwords.json.generated:/opt/airflow/simple_auth_manager_passwords.json.generated
 
     ports:
       - "8080:8080"
-    
     command: airflow standalone

@@ -107,13 +107,15 @@ def run_webscrapping():
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
+    print("aaaaaaaaaaaaaaaaaaaaa")
     scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
-    scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
-    scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
-    scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
-    scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
+    #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
+    #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
+    #scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
+    #scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
 
-
+    with open("/opt/airflow/logs/log.txt", "w") as f:
+        f.write(str(datetime.now()))
 
 
 if __name__ == "__main__":

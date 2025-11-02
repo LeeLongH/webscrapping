@@ -2,3 +2,4 @@ beautifulsoup4
 firebase-admin
 requests
 selenium
+webdriver_manager
