@@ -15,7 +15,7 @@ from optius import scrap_optius
 from mojedelo import scrap_mojedelo
 from careerjet import scrap_careerjet
 
-def run_webscrapping():
+def run_webscrapping(is_manually_ran=False):
 
     # --- Firebase setup ---
     if __name__ == "__main__":
@@ -37,22 +37,19 @@ def run_webscrapping():
         Fetch all Firebase jobs where 'date' equals today.
         Returns a list of dicts with fields: title, location, description, uri.
         """
-        jobs_ref = db.reference("/")  # replace 'jobs' with your collection name
+        jobs_ref = db.reference("jobs")  # replace "jobs" with your node name
+        snapshot = jobs_ref.get()  # fetch all jobs
 
-        #query = jobs_ref.where("date", "==", today_date)
-        query = jobs_ref.where("date", "<=", today_date)
-        docs = query.stream()
-        
         jobs = []
-        for doc in docs:
-            data = doc.to_dict()
-            jobs.append({
-                "title": data.get("title", "No title"),
-                "location": data.get("location", "No location"),
-                "description": data.get("description", "No description"),
-                "uri": data.get("uri", "No link")
-            })
-
+        if snapshot:
+            for key, data in snapshot.items():
+                if data.get("date") == today_date:
+                    jobs.append({
+                        "title": data.get("title", "No title"),
+                        "location": data.get("location", "No location"),
+                        "description": data.get("description", "No description"),
+                        "uri": data.get("uri", "No link")
+                    })
         return jobs
 
 
@@ -70,7 +67,7 @@ def run_webscrapping():
         str = reduce(lambda a, kv: a.replace(*kv), dict, str).capitalize()
         return str
 
-    def push_to_db(*, title, location, description, uri):
+    def push_to_db(*, title, location, description, uri, ti=None):
         ref.push({
             "title": title,
             "location": location,
@@ -80,30 +77,42 @@ def run_webscrapping():
         })
         print(f"{title[:10]} pushed to DB")
 
+        if ti is not None:
+            existing_jobs = ti.xcom_pull(key="jobs", task_ids="webscrapping") or []
+            existing_jobs.append({
+                "title": title,
+                "location": location,
+                "description": description,
+                "uri": uri
+            })
+            ti.xcom_push(key="jobs", value=existing_jobs)
+
     def insert_to_db_if_new_record(title, location, description, uri=False):
         # Get newest 10 records from DB
-        records = ref.order_by_key().limit_to_last(10).get()
+        records = ref.order_by_key().limit_to_last(15).get()
         
         # push straight away if no prior records in DB
         if not records:
+            print("No prior records in Firebase")
             push_to_db(title=title, location=location, description=description, uri=uri)
             return
+
+        duplicate_found = False 
 
         # loop thru sorted records
         for key in sorted(records.keys(), reverse=True):
             record = records[key]
             record_date = datetime.strptime(record.get("date"), "%Y-%m-%d")
-            if record_date < yesterday_date:
-                # No new-ish record exists, add it to DB
-                push_to_db(title=title, location=location, description=description, uri=uri)
-                break
-            else:
-                if  record.get("title") == title and \
-                    record.get("location") == location and \
-                    record.get("description", "")[:10] == description[:10]:
-                    # The current record exists in DB, skip it
+
+            if record_date >= yesterday_date: # get only recent DB records
+                if  record.get("uri") == uri:
+                    duplicate_found = True
                     print(f"Record {title[0:13]} exists in DB")
-                    break
+                    break     
+                
+        if not duplicate_found:
+            push_to_db(title=title, location=location, description=description, uri=uri)
+
 
     URI_studentski_servis = ("https://www.studentski-servis.com/studenti/prosta-dela?isci=1&dd1=1&dm1s=1&skD[]=004&skD[]=A832&skD[]=A210&skD[]=A055&skD[]=A078&skD[]=A090&skD[]=A095&hourlyratefrom=6.32&hourlyrateto=36&hourly_rate=6.32%3B26&regija[]=ljubljana-z-okolico&regija[]=domzale-kamnik")
 
@@ -121,15 +130,16 @@ def run_webscrapping():
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
-    #scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
-    #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
-    #scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
-    #scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
-    #scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
+    scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
+    scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
+    scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
+    scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
+    scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
 
-    with open("/opt/airflow/logs/log.txt", "w") as f:
-        log = "Great success: " + str(datetime.now())
-        f.write(log)
+    if not is_manually_ran:
+        with open("/opt/airflow/logs/log.txt", "w") as f:
+            log = "Great success: " + str(datetime.now())
+            f.write(log)
 
     # Get today's Firebase jobs
     todays_jobs = get_todays_jobs()
@@ -138,5 +148,5 @@ def run_webscrapping():
 
 
 if __name__ == "__main__":
-    run_webscrapping()
+    run_webscrapping(is_manually_ran=True)
 

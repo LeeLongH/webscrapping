@@ -1,11 +1,16 @@
-from bs4 import BeautifulSoup
+import smtplib
 
-with open("out.html", "rb") as f:
-    html_file = f.read()
+smtp_user = "leon.sturm2@gmail.com"
+smtp_pass = ""
 
-soup = BeautifulSoup(html_file, "html.parser")
+server = smtplib.SMTP("smtp.gmail.com", 587)
+server.starttls()
+server.login(smtp_user, smtp_pass)
+server.sendmail(
+    smtp_user,
+    "leon.sturm2@gmail.com",
+    "Subject: Test\n\nThis is a test email from Airflow container."
+)
+server.quit()
+print("✅ Email sent successfully!")
 
-section = soup.find("section", class_="content")
-text = section.get_text(strip=True) if section else None
-
-print(text)

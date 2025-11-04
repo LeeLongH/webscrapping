@@ -22,7 +22,6 @@ dag = DAG(
     'Job_Scrapping',
     default_args=default_args,
     schedule='0 18 * * *',
-    #schedule='32 13 * * *',
     catchup=False
 )
 

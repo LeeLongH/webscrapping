@@ -33,4 +33,4 @@ def scrap_studentski_servis(soup, insert_to_db, to_lower):
         #print(f"{title}\n{location}\n{description}\n\n")
 
         # Insert into DB using the function passed from the controller
-        insert_to_db(to_lower(title), to_lower(location), to_lower(description))
+        insert_to_db(to_lower(title), to_lower(location), to_lower(description), "Studentski servis")

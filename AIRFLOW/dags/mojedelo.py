@@ -39,7 +39,7 @@ def scrap_specific_job(job_link, id, today_id):
         "startFrom": 0
     }
 
-    response = requests.get(uri, headers=headers)
+    response = requests.get(uri, headers=headers, params=params)
     #print("s: ", response.status_code)
 
     if response.status_code == 200:
@@ -66,7 +66,7 @@ def scrap_specific_job(job_link, id, today_id):
 
         return description
 
-def scrap_jobs(uri, today_id):
+def scrap_jobs(uri, today_id, insert_to_db):
 
     headers = {
         "accept": "application/json, text/plain, */*",
@@ -119,8 +119,10 @@ def scrap_jobs(uri, today_id):
 
             # Merge company name into location
             location = company + ", " + location
+    
+            description = scrap_specific_job(job_link, id, today_id)
+            insert_to_db(title=title, location=location, uri=job_link, description=description)
 
-            return job_link, id, title, location
         
     else:
         print("Error:", response.text[:500])
@@ -171,9 +173,6 @@ def get_todays_UUID():
 def scrap_mojedelo(uri, insert_to_db):
     today_id = get_todays_UUID()
     #print("id: ", today_id)
-    job_link, id, title, location = scrap_jobs(uri, today_id)
-    if not job_link:
-        return
-    description = scrap_specific_job(job_link, id, today_id)
-    insert_to_db(title=title, location=location, uri=job_link, description=description)
+    scrap_jobs(uri, today_id, insert_to_db)
+
 

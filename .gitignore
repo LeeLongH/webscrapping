@@ -1,3 +1,4 @@
 db-credentials.json
 AIRFLOW/logs/
 AIRFLOW/simple_auth_manager_passwords.json.generated
+.env
