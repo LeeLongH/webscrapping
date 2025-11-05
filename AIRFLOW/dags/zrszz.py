@@ -101,16 +101,19 @@ def get_job_info(url, job_id):
         delodajalec = data.get("delodajalec")
         delodajalecNaslov = data.get("delodajalecNaslov")
         location = f"{delodajalec}, {delodajalecNaslov}"
+        
+        job_id = data.get("idDelovnoMesto")
+        uri = f"https://www.ess.gov.si/iskalci-zaposlitve/iskanje-zaposlitve/iskanje-dela/?idp={job_id}/#/pdm/{job_id}"
 
-        return (description, location)
+        return (uri, description, location)
 
 def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db, to_lower):
     jobs_id, titles = get_jobs_id(URL1_ZRSZZ)
 
     print(f"{'zrszz':<10}: {len(jobs_id)} jobs")
     for i in range(0, len(jobs_id)):
-        description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
-        insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), URL2_ZRSZZ)
+        uri, description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
+        insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), uri)
 
 # Response Example of "get_jobs_id(URL1_ZRSZZ)"
 """

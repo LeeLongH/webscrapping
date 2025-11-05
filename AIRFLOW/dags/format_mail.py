@@ -38,7 +38,7 @@ def compose_email(**kwargs):
     if not todays_jobs:
         html_content = "<h3>No jobs found for today.</h3>"
     else:
-        html_content = "<h3>Today's Jobs:</h3>"
+        html_content = f"""<h3>Today's Jobs = {len(todays_jobs)}</h3>"""
         for job in todays_jobs:
             html_content += f"""
             <p>
@@ -57,9 +57,9 @@ def compose_email(**kwargs):
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = smtp_user
-    msg["To"] = "leon.sturm2@gmail.com"
-    #recipients = "leon.sturm2@gmail.com, someone.else@example.com, third.person@example.com"
-    #msg["To"] = recipients
+    #msg["To"] = "leon.sturm2@gmail.com"
+    recipients = "leon.sturm2@gmail.com, aljaz.trobevsek1@gmail.com"
+    msg["To"] = recipients
     msg.attach(MIMEText(html_content, "html"))
 
     try:

@@ -62,7 +62,10 @@ def run_webscrapping(is_manually_ran=False):
         dict = \
             ('študenti/ke', 'študenti'), \
             ('študenta/ko', 'študenta'), \
-            ('študenta/ki', '2 študenta')
+            ('študenta/ki', '2 študenta'), \
+            ('asistenta/ko','asistenta')
+        
+        #m/ž
         
         str = reduce(lambda a, kv: a.replace(*kv), dict, str).capitalize()
         return str
@@ -108,7 +111,8 @@ def run_webscrapping(is_manually_ran=False):
                 if  record.get("uri") == uri:
                     duplicate_found = True
                     print(f"Record {title[0:13]} exists in DB")
-                    break     
+                    break
+
                 
         if not duplicate_found:
             push_to_db(title=title, location=location, description=description, uri=uri)

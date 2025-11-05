@@ -21,7 +21,7 @@ default_args = {
 dag = DAG(
     'Job_Scrapping',
     default_args=default_args,
-    schedule='0 18 * * *',
+    schedule=None,
     catchup=False
 )
 
