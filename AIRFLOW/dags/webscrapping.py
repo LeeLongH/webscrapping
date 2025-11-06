@@ -80,16 +80,6 @@ def run_webscrapping(is_manually_ran=False):
         })
         print(f"{title[:10]} pushed to DB")
 
-        if ti is not None:
-            existing_jobs = ti.xcom_pull(key="jobs", task_ids="webscrapping") or []
-            existing_jobs.append({
-                "title": title,
-                "location": location,
-                "description": description,
-                "uri": uri
-            })
-            ti.xcom_push(key="jobs", value=existing_jobs)
-
     def insert_to_db_if_new_record(title, location, description, uri=False):
         # Get newest 10 records from DB
         records = ref.order_by_key().limit_to_last(15).get()
@@ -135,7 +125,7 @@ def run_webscrapping(is_manually_ran=False):
     #soup = BeautifulSoup(webpage, 'html.parser')
 
     scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
-    scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
+    #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
     scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
     scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
     scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
