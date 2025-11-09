@@ -10,13 +10,12 @@ from format_mail import compose_email
 
 default_args = {
     'start_date': datetime.now() - timedelta(days=1),
-    'email_on_failure': True,  # send email on failure
-    'email_on_retry': False,   # optional: disable email on retry
-    'email': ['recipient@example.com'],  # replace with your email
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'email': ['leon.sturm2@.com'],
     'retries': 1,
     'retry_delay': timedelta(minutes=5)
 }
-
 
 dag = DAG(
     'Job_Scrapping',
@@ -25,14 +24,14 @@ dag = DAG(
     catchup=False
 )
 
-# proceede with webscrapping
-call_webscrapping= PythonOperator(
+    # --- WEBSCRAPPING ---
+call_webscrapping = PythonOperator(
     task_id = 'webscrapping.py',
     python_callable = run_webscrapping,
     dag=dag
 )
 
-# Send an email
+    # --- MAIL ---
 send_email = PythonOperator(
     task_id='send_email',
     python_callable=compose_email,

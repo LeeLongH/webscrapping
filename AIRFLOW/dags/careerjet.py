@@ -99,7 +99,7 @@ def parse_jobs(html, insert_to_db):
         
         for job in items[:10]:  # 10 jobs as limit
 
-            title = job.select_one("a") or job.select_one(".title") or job.select_one("h2") or job.select_one("h3")
+            title_tag = job.select_one("a") or job.select_one(".title") or job.select_one("h2") or job.select_one("h3")
             
             # Get short description (part of long description)
             #desc_tag = job.find("div", class_="desc")
@@ -109,14 +109,16 @@ def parse_jobs(html, insert_to_db):
             loc_tag = job.find_next("ul", class_="location")
             location = loc_tag.get_text(strip=True) if loc_tag else None
 
-            link = title["href"] if title and title.has_attr("href") else None
-            desciption = parse_specific_job("https://www.careerjet.si" + link)
+            link_ending = title_tag["href"] if title_tag and title_tag.has_attr("href") else None
+            link = "https://www.careerjet.si" + link_ending
+            desciption = parse_specific_job(link)
 
-            #print(f"Title: {title.text.strip()}")
+            #print(f"Title: {title_tag.text.strip()}")
             #print(f"Link: {link}")
             #print(f"Location: {location}")
             #print(f"desc.: {desc}")
             #print(f"desciption: {desciption}")
+            title = title_tag.get_text(strip=True)
             insert_to_db(title, location, desciption, link)
 
 def scrap_careerjet(URI_careerjet, insert_to_db):

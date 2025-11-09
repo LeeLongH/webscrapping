@@ -1,26 +1,27 @@
 # webscrapping
 
+1) webscrapping from:
+- Študentski servis
+- Optius
+- ZRSZZ
+- Careerjet
+- Moje delo
+
+2) Loaded into Firebase (DAG)
+
+3) Job posts notified via emails (DAG), adjusted for different users 
+
+Batch file turns Docker on/off, unpaused the DAG and starts it
 
 
+# Some commands
 
 docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
-telnet smtp.gmail.com 587
-
-
-docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
-pip install firebase-admin
-
-pip list | grep firebase-admin
 
 docker-compose down
 docker-compose build
-docker-compose up -d
+docker-compose up -d --build
 
-docker compose down
-docker compose up -d --build
-
-
-docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
 python -m pip show firebase-admin
 python -m pip show beautifulsoup4
 
@@ -28,35 +29,12 @@ python -m pip show beautifulsoup4
 docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
 
 # Install packages for Airflow user
-pip install --user firebase-admin beautifulsoup4 requests selenium
+pip install --user firebase-admin beautifulsoup4 requests selenium webdriver_manager
 
 # Verify
-pip list | grep -e firebase -e firebase-admin -e beautifulsoup4 -e selenium
+pip list | grep -e firebase -e firebase-admin -e beautifulsoup4 -e selenium -e webdriver_manager -e requests
 
-
-
-docker exec -it dag_jobs_webscrapping-webscrapping-1 bash
-python -m pip show firebase-admin
-python -m pip show beautifulsoup4
 
 docker exec -it dag_jobs_webscrapping-webscrapping-1 airflow dags trigger Job_Scrapping
-
-
-
-import smtplib
-
-smtp_user = "leon.sturm2@gmail.com" 
-smtp_pass = "..."
-
-with smtplib.SMTP("smtp.gmail.com", 587) as server:
-    server.starttls()
-    server.login(smtp_user, smtp_pass)
-    server.sendmail(
-        smtp_user,
-        "leon.sturm2@gmail.com", 
-        "Subject: SMTP Test\n\nThis is a test email from Airflow container."
-    )
-
-print("✅ Email sent successfully!")
 
 

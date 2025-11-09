@@ -7,8 +7,7 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import db, credentials
 
-# --- helper function to build HTML ---
-
+# --- helper function to build customer user-focused HTML ---
 def build_html(jobs):
     if not jobs:
         return "<h3>No jobs found for today.</h3>"
@@ -26,6 +25,7 @@ def build_html(jobs):
     return html
 
 def compose_email(**kwargs):
+
     # --- Firebase reference ---
     if not firebase_admin._apps:
         cred = credentials.Certificate("/opt/airflow/db-credentials.json")
@@ -36,7 +36,7 @@ def compose_email(**kwargs):
     ref = db.reference("/")
     today_date = datetime.today().strftime("%Y-%m-%d")
 
-    # --- fetch todays jobs ---
+    # --- fetch today's jobs ---
     snapshot = ref.order_by_child("date").limit_to_last(20).get() or {}
 
     todays_jobs = [
@@ -50,38 +50,25 @@ def compose_email(**kwargs):
         if data.get("date") == today_date
     ]
 
-    if not todays_jobs:
-        html_content = "<h3>No jobs found for today.</h3>"
-    else:
-        html_content = f"""<h3>{len(todays_jobs)} jobs today</h3>"""
-        for job in todays_jobs:
-            html_content += f"""
-            <p>
-                <b>Title:</b> {job['title']}<br>
-                <b>Location:</b> {job['location']}<br>
-                <b>Description:</b> {job['description']}<br>
-                <b>URI:</b> <a href="{job['uri']}">{job['uri']}</a>
-            </p>
-            <hr>
-            """
-
-
     # --- filtering for Leon ---
 
     keywords = ["sql", "kafka", "airflow", "data", "engineer", "bigquery", "apache",
                 "spark", "engineering", "etl", "python", "automate", "pandas", "numpy", 
-                "postgre", "mysql", "mongodb", "databrics", "pipeline", "pipelines",
+                "postgre", "mysql", "mongodb", "databricks", "pipeline", "pipelines",
                 "postgresql", "Tableau", "pyspark", "aws", "dashboards", "dashboard",
                 "dbt", "hadoop", "snowflake", "redshift", "docker", "inženir", "podatkovni",
                 "podatki", "baza", "baze"            
                 ]
+    
     leon_jobs = [
         job for job in todays_jobs
-        if any(keyword.lower() in job["description"].lower() for keyword in keywords)
+        if any(
+            keyword in job["description"].lower() for keyword in keywords)
     ]
 
+    # --- filtering for Tadej ---
 
-    
+    tadej_jobs = [job for job in todays_jobs if job['uri'] == "Studentski servis"]
 
     # --- PREPARE EMAILS ---
 
@@ -89,9 +76,9 @@ def compose_email(**kwargs):
     smtp_pass = os.getenv("AIRFLOW__SMTP__SMTP_PASSWORD")
 
     recipient_info = {
-        "leon.sturm2@gmail.com": leon_jobs,
-        #"tadej.trobevsek10@gmail.com": all_jobs
-        "leelongmy@gmail.com": todays_jobs
+        "leon.sturm2@gmail.com": leon_jobs
+        ,"tadej.trobevsek10@gmail.com": tadej_jobs
+        #,"leelongmy@gmail.com": tadej_jobs
     }
 
     for recipient, job in recipient_info.items():

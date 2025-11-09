@@ -111,9 +111,24 @@ def scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db, to_lower):
     jobs_id, titles = get_jobs_id(URL1_ZRSZZ)
 
     print(f"{'zrszz':<10}: {len(jobs_id)} jobs")
+
+    if not jobs_id:
+        return
+    
+    keywords = ["sql", "kafka", "airflow", "data", "engineer", "bigquery", "apache",
+            "spark", "engineering", "etl", "python", "automate", "pandas", "numpy", 
+            "postgre", "mysql", "mongodb", "databrics", "pipeline", "pipelines",
+            "postgresql", "Tableau", "pyspark", "aws", "dashboards", "dashboard",
+            "dbt", "hadoop", "snowflake", "redshift", "docker", "inženir", "podatkovni",
+            "podatki", "baza", "baze", "c", "c++", "c#", "react", "react.js", "api", 
+            "javascript", "linux", "software"            
+            ]
+    
     for i in range(0, len(jobs_id)):
         uri, description, location = get_job_info(URL2_ZRSZZ, jobs_id[i])
-        insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), uri)
+
+        if any(keyw in description.lower() for keyw in keywords):
+            insert_to_db(to_lower(titles[i]), to_lower(location), to_lower((description)), uri)
 
 # Response Example of "get_jobs_id(URL1_ZRSZZ)"
 """

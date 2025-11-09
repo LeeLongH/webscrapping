@@ -15,6 +15,8 @@ from optius import scrap_optius
 from mojedelo import scrap_mojedelo
 from careerjet import scrap_careerjet
 
+NUM_OF_JOBS_TO_READ = 30
+
 def run_webscrapping(is_manually_ran=False):
 
     # --- Firebase setup ---
@@ -82,7 +84,7 @@ def run_webscrapping(is_manually_ran=False):
 
     def insert_to_db_if_new_record(title, location, description, uri=False):
         # Get newest 10 records from DB
-        records = ref.order_by_key().limit_to_last(15).get()
+        records = ref.order_by_key().limit_to_last(NUM_OF_JOBS_TO_READ).get()
         
         # push straight away if no prior records in DB
         if not records:
@@ -118,17 +120,18 @@ def run_webscrapping(is_manually_ran=False):
     # Incomplete URI with missing UUID date for job post query. URI gets correctly filled up inside mojdelo.py after API call inquiring today's UUID
     URI_mojedelo="https://api.mojedelo.com/job-ads-search?jobCategoryIds=64f003ff-6d8b-4be0-b58c-4580e4eeeb8a&regionIds=d1dce9b1-9fa4-438b-b582-10d371d442e6&pageSize=20&startFrom=0"
 
-    URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Slovenija&nw=1")
+    URI_careerjet = ("https://www.careerjet.si/delovna-mesta?s=podatkovni&l=Osrednjeslovenska&nw=1")
 
     #URI_webpage = URI_optius
     #webpage = requests.get(URI_webpage).text
     #soup = BeautifulSoup(webpage, 'html.parser')
 
     scrap_studentski_servis(BeautifulSoup(requests.get(URI_studentski_servis).text, 'html.parser'), insert_to_db_if_new_record, to_lower)
-    #scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
+    scrap_ZRSZZ(URL1_ZRSZZ, URL2_ZRSZZ, insert_to_db_if_new_record, to_lower)
     scrap_optius(BeautifulSoup(requests.get(URI_optius).text, 'html.parser'), insert_to_db_if_new_record)
     scrap_mojedelo(URI_mojedelo, insert_to_db_if_new_record)
-    scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
+    if __name__ != "__main__":
+        scrap_careerjet(URI_careerjet, insert_to_db_if_new_record)
 
     if not is_manually_ran:
         with open("/opt/airflow/logs/log.txt", "w") as f:
