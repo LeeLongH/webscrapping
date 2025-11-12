@@ -61,7 +61,7 @@ def run_webscrapping(is_manually_ran=False):
             return ""
         
         str = str.lower()
-        dict = \
+        """dict = \
             ('študenti/ke', 'študenti'), \
             ('študenta/ko', 'študenta'), \
             ('študenta/ki', '2 študenta'), \
@@ -70,7 +70,8 @@ def run_webscrapping(is_manually_ran=False):
         #m/ž
         
         str = reduce(lambda a, kv: a.replace(*kv), dict, str).capitalize()
-        return str
+        """
+        return str.capitalize()
 
     def push_to_db(*, title, location, description, uri, ti=None):
         ref.push({
@@ -100,6 +101,15 @@ def run_webscrapping(is_manually_ran=False):
             record_date = datetime.strptime(record.get("date"), "%Y-%m-%d")
 
             if record_date >= yesterday_date: # get only recent DB records
+                source = record.get("uri")
+                if source.startswith("https://www.studentski"):
+                    if title == record.get("title") and \
+                        location == record.get("location") and \
+                        description == record.get("description"):
+                        duplicate_found = True
+                        print(f"Record {title[0:13]} exists in DB")
+                        break
+
                 if  record.get("uri") == uri:
                     duplicate_found = True
                     print(f"Record {title[0:13]} exists in DB")

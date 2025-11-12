@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup
 
 def scrap_specific_job(uri, insert_to_db):
-    print(uri)
+    #print(uri)
     webpage = requests.get(uri).text
     soup = BeautifulSoup(webpage, 'html.parser')
     job_section = soup.body.select_one('section.col.typography.job-detail-col.wholesize')

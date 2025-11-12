@@ -68,7 +68,7 @@ def compose_email(**kwargs):
 
     # --- filtering for Tadej ---
 
-    tadej_jobs = [job for job in todays_jobs if job['uri'] == "Studentski servis"]
+    tadej_jobs = [job for job in todays_jobs if job['uri'].startswith("https://www.studentski")]
 
     # --- PREPARE EMAILS ---
 
@@ -78,7 +78,8 @@ def compose_email(**kwargs):
     recipient_info = {
         "leon.sturm2@gmail.com": leon_jobs
         ,"tadej.trobevsek10@gmail.com": tadej_jobs
-        #,"leelongmy@gmail.com": tadej_jobs
+        #,
+        #"leelongmy@gmail.com": tadej_jobs
     }
 
     for recipient, job in recipient_info.items():
