@@ -12,17 +12,35 @@ def build_html(jobs):
     if not jobs:
         return "<h3>No jobs found for today.</h3>"
     html = f"<h3>{len(jobs)} jobs today</h3>"
+    
     for job in jobs:
+
+        uri = job['uri']
+        match uri:
+            case _ if uri.startswith("https://www.optius"):
+                source = "Optius"
+            case _ if uri.startswith("https://www.ess"):
+                source = "Zrszz"
+            case _ if uri.startswith("https://www.studentski"):
+                source = "Študentski servis"
+            case _ if uri.startswith("https://www.mojedelo"):
+                source = "Moje delo"
+            case _ if uri.startswith("https://www.careerjet"):
+                source = "Careerjet"
+            case _:
+                source = "source"
+
         html += f"""
         <p>
             <b>Title:</b> {job['title']}<br>
             <b>Location:</b> {job['location']}<br>
             <b>Description:</b> {job['description']}<br>
-            <b>URI:</b> <a href="{job['uri']}">{job['uri']}</a>
+            <b>URI:</b> <a href="{uri}" target="_blank">{source}</a>
         </p>
         <hr>
         """
     return html
+    #<b>URI:</b> <a href="{job['uri']}">{job['uri']}</a>
 
 def compose_email(**kwargs):
 
