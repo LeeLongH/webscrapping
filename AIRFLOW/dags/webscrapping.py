@@ -74,6 +74,10 @@ def run_webscrapping(is_manually_ran=False):
         return str.capitalize()
 
     def push_to_db(*, title, location, description, uri, ti=None):
+
+        if "Kranj" in location:
+            return
+        
         ref.push({
             "title": title,
             "location": location,

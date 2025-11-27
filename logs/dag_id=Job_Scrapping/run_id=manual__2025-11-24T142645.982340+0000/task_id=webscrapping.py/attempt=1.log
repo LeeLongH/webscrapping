@@ -1,0 +1,32 @@
+{"timestamp":"2025-11-24T14:26:50.798332Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2025-11-24T14:26:50.800207Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/job_scrapping_DAG.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-24T14:26:51.692045Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":2,"logger":"py.warnings"}
+{"timestamp":"2025-11-24T14:26:51.692251Z","level":"warning","event":"The `airflow.operators.email.EmailOperator` attribute is deprecated. Please use `'airflow.providers.smtp.operators.smtp.EmailOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":3,"logger":"py.warnings"}
+{"timestamp":"2025-11-24T14:26:51.692354Z","level":"warning","event":"The `airflow.utils.trigger_rule.TriggerRule` attribute is deprecated. Please use `'airflow.task.trigger_rule.TriggerRule'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":4,"logger":"py.warnings"}
+{"timestamp":"2025-11-24T14:26:52.660928Z","level":"info","event":"stud.serv.: 2 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:53.295426Z","level":"info","event":"Pomoč upor pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:53.486992Z","level":"info","event":"Programira pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:53.660097Z","level":"info","event":"zrszz     : 1 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:53.957055Z","level":"info","event":"Sistemski  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:56.107098Z","level":"info","event":"SKB LEASIN pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:56.982958Z","level":"info","event":"Kariera d. pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:57.409608Z","level":"info","event":"mojedelo  : 5 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:57.665345Z","level":"info","event":"Vodja ekip pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:57.932325Z","level":"info","event":"Senior Sof pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:58.213260Z","level":"info","event":"Embedded s pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:58.491042Z","level":"info","event":"Izkušeni p pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:58.772113Z","level":"info","event":"Junior IT  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:26:58.775443Z","level":"info","event":"====== WebDriver manager ======","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:26:59.328059Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:26:59.503826Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:26:59.631086Z","level":"info","event":"There is no [linux64] chromedriver \"142.0.7444.175\" for browser chromium \"142.0.7444\" in cache","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:26:59.631374Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:00.001783Z","level":"info","event":"WebDriver version 142.0.7444.175 selected","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:00.012491Z","level":"info","event":"Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.175/linux64/chromedriver-linux64.zip","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:00.012719Z","level":"info","event":"About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.175/linux64/chromedriver-linux64.zip","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:00.174843Z","level":"info","event":"Driver downloading response is 200","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:03.456889Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:03.833933Z","level":"info","event":"Driver has been saved in cache [/home/airflow/.wdm/drivers/chromedriver/linux64/142.0.7444.175]","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-24T14:27:06.405203Z","level":"info","event":"Careerjet : 0 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-24T14:27:06.589652Z","level":"info","event":"Done. Returned value was: {'jobs': []}","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2025-11-24T14:27:06.590003Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019ab642-8c84-77d3-be26-9bb375d696cb'), task_id='webscrapping.py', dag_id='Job_Scrapping', run_id='manual__2025-11-24T14:26:45.982340+00:00', try_number=1, dag_version_id=UUID('019ab642-5336-7465-88b2-63577308ff3d'), map_index=-1, hostname='5e6f8cd88d6f', context_carrier={}, task=<Task(PythonOperator): webscrapping.py>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=1, start_date=datetime.datetime(2025, 11, 24, 14, 26, 46, 938120, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

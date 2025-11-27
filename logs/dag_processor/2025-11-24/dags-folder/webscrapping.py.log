@@ -1,0 +1,3 @@
+{"timestamp":"2025-11-24T14:26:29.373662Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/webscrapping.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-24T14:27:01.896039Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/webscrapping.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-24T14:27:33.510298Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/webscrapping.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}

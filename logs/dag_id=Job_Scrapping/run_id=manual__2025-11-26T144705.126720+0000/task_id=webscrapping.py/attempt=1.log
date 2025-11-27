@@ -1,0 +1,48 @@
+{"timestamp":"2025-11-26T14:47:10.131685Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":179}
+{"timestamp":"2025-11-26T14:47:10.133706Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/job_scrapping_DAG.py","logger":"airflow.models.dagbag.DagBag","filename":"dagbag.py","lineno":593}
+{"timestamp":"2025-11-26T14:47:11.049647Z","level":"warning","event":"The `airflow.operators.python.PythonOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.python.PythonOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":2,"logger":"py.warnings"}
+{"timestamp":"2025-11-26T14:47:11.049912Z","level":"warning","event":"The `airflow.operators.email.EmailOperator` attribute is deprecated. Please use `'airflow.providers.smtp.operators.smtp.EmailOperator'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":3,"logger":"py.warnings"}
+{"timestamp":"2025-11-26T14:47:11.050056Z","level":"warning","event":"The `airflow.utils.trigger_rule.TriggerRule` attribute is deprecated. Please use `'airflow.task.trigger_rule.TriggerRule'`.","category":"DeprecatedImportWarning","filename":"/opt/airflow/dags/job_scrapping_DAG.py","lineno":4,"logger":"py.warnings"}
+{"timestamp":"2025-11-26T14:47:11.936135Z","level":"info","event":"stud.serv.: 4 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:12.515664Z","level":"info","event":"Informatik pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:12.671658Z","level":"info","event":"Informatik pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:12.831080Z","level":"info","event":"Servisiran pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:13.000899Z","level":"info","event":"Programira pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:13.145607Z","level":"info","event":"zrszz     : 2 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:13.427238Z","level":"info","event":"Sistemski  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:13.679085Z","level":"info","event":"Razvijalec pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:15.788364Z","level":"info","event":"/ pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:16.891863Z","level":"info","event":"RLS d.o.o. pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:17.775947Z","level":"info","event":"Kariera d. pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:18.238525Z","level":"info","event":"mojedelo  : 17 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:18.476915Z","level":"info","event":"Tehnik nap pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:18.720547Z","level":"info","event":"Inženir za pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:18.981869Z","level":"info","event":"Podatkovni pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:19.232666Z","level":"info","event":"Meta oglaš pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:19.486234Z","level":"info","event":"DevOps inž pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:19.724500Z","level":"info","event":"Back-end r pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:19.986399Z","level":"info","event":"Specialist pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:20.269861Z","level":"info","event":"ERP Razvij pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:20.525318Z","level":"info","event":"Produktni  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:20.778142Z","level":"info","event":"Senior Ful pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:21.041020Z","level":"info","event":"Strokovnja pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:21.304757Z","level":"info","event":"Senior Mob pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:21.554394Z","level":"info","event":"Samostojni pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:21.793748Z","level":"info","event":"Sistemski  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:22.042342Z","level":"info","event":"QA inženir pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:22.296007Z","level":"info","event":"Tehnolog z pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:22.554492Z","level":"info","event":"Sistemski  pushed to DB","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:22.559971Z","level":"info","event":"====== WebDriver manager ======","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.207693Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.427985Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.549070Z","level":"info","event":"There is no [linux64] chromedriver \"142.0.7444.175\" for browser chromium \"142.0.7444\" in cache","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.549316Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.941465Z","level":"info","event":"WebDriver version 142.0.7444.175 selected","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.950274Z","level":"info","event":"Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.175/linux64/chromedriver-linux64.zip","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:23.950489Z","level":"info","event":"About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/142.0.7444.175/linux64/chromedriver-linux64.zip","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:24.106885Z","level":"info","event":"Driver downloading response is 200","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:26.019464Z","level":"info","event":"Get LATEST chromedriver version for chromium","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:26.316254Z","level":"info","event":"Driver has been saved in cache [/home/airflow/.wdm/drivers/chromedriver/linux64/142.0.7444.175]","logger":"WDM","filename":"logger.py","lineno":11}
+{"timestamp":"2025-11-26T14:47:28.887125Z","level":"info","event":"Careerjet : 0 jobs","logger":"task.stdout"}
+{"timestamp":"2025-11-26T14:47:29.058427Z","level":"info","event":"Done. Returned value was: {'jobs': []}","logger":"airflow.task.operators.airflow.providers.standard.operators.python.PythonOperator","filename":"python.py","lineno":215}
+{"timestamp":"2025-11-26T14:47:29.058770Z","level":"info","event":"Pushing xcom","ti":"RuntimeTaskInstance(id=UUID('019ac0a1-dec7-759e-9dd1-f9c8003a3479'), task_id='webscrapping.py', dag_id='Job_Scrapping', run_id='manual__2025-11-26T14:47:05.126720+00:00', try_number=1, dag_version_id=UUID('019ac0a1-aac6-753b-9da8-875114919699'), map_index=-1, hostname='e27a34f6b5bb', context_carrier={}, task=<Task(PythonOperator): webscrapping.py>, bundle_instance=LocalDagBundle(name=dags-folder), max_tries=1, start_date=datetime.datetime(2025, 11, 26, 14, 47, 6, 354617, tzinfo=datetime.timezone.utc), end_date=None, state=<TaskInstanceState.RUNNING: 'running'>, is_mapped=False, rendered_map_index=None)","logger":"task","filename":"task_runner.py","lineno":1360}

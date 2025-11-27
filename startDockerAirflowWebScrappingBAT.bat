@@ -1,6 +1,8 @@
 REM No console feedback mode
 @echo off
 
+"C:\Program Files\Docker\Docker\DockerCli.exe" -Shutdown
+
 REM Start Docker Desktop
 start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 
@@ -26,7 +28,7 @@ timeout /t 60
 REM kill docker containers
 docker-compose down
 
-REM if you kill Docker app like the following line, it "corrupts?" Win wifi-driver which needs to be reinstalled:
+REM if you kill Docker app like he following line, it "corrupts?" Win wifi-driver which needs to be reinstalled:
 REM taskkill /IM "Docker Desktop.exe" /F
 REM use shutdown instead:
 "C:\Program Files\Docker\Docker\DockerCli.exe" -Shutdown
